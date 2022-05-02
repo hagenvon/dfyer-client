@@ -1,0 +1,13 @@
+.rarity-item-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.rarity-item-label {
+    font-weight: 600;
+
+}
+
+.progress-bar {
+    background-color: darkcyan;
+}

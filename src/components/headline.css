@@ -1,0 +1,10 @@
+.headline {
+    font-weight: 600;
+    font-size: 150%;
+    margin-bottom: 0.75rem;
+}
+
+.sub-headline {
+    margin-bottom: 0.75rem;
+    margin-top: -0.5rem;
+}
