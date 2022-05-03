@@ -6,6 +6,7 @@ import React from "react";
 import { ThugDetails } from "../components/headlines/ThugDetails";
 import { useSelector } from "react-redux";
 import { selectOwnedTokens } from "../redux/metadataSelectors";
+import { BaseLayout } from "./BaseLayout";
 
 export function SingleTokenPage() {
   const { token } = useParams();
@@ -13,7 +14,7 @@ export function SingleTokenPage() {
   const otherOwnedTokens = ownedTokens.filter((it) => it !== token);
 
   return (
-    <>
+    <BaseLayout>
       <Grid>
         <Grid.Col xs={12}>
           <Box mr={-15} mb={12} mt={10}>
@@ -48,6 +49,6 @@ export function SingleTokenPage() {
           <AvailableUpdates token={token || ""} />
         </Grid.Col>
       </Grid>
-    </>
+    </BaseLayout>
   );
 }

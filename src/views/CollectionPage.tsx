@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Center,
@@ -26,6 +26,8 @@ import {
   selectInfamousDataWithScore,
 } from "../redux/selectors";
 import { Editions } from "../models/Rarity.models";
+import { fetchListings } from "../redux/listingsState";
+import { BaseLayout } from "./BaseLayout";
 
 export function CollectionPage() {
   const [activePage, setPage] = useState(1);
@@ -49,8 +51,6 @@ export function CollectionPage() {
 
     return given * 100;
   };
-
-  console.log(countedAttributes);
 
   const sortedItems = filteredItems.sort(compareRarity);
 
@@ -134,7 +134,7 @@ export function CollectionPage() {
   );
 
   return (
-    <>
+    <BaseLayout>
       <Grid>
         <Grid.Col>
           <Box mb={12} mt={10} style={{ alignItems: "flex-start" }}>
@@ -160,18 +160,34 @@ export function CollectionPage() {
       </Group>
 
       <Collapse in={filterOpened}>
-        <SimpleGrid cols={3} mb={25} spacing={"sm"}>
+        <SimpleGrid
+          cols={3}
+          mb={25}
+          spacing={"sm"}
+          breakpoints={[
+            { maxWidth: "sm", cols: 3, spacing: "sm" },
+            { maxWidth: "xs", cols: 2, spacing: "xs" },
+          ]}
+        >
           {filterItems}
         </SimpleGrid>
       </Collapse>
 
-      <SimpleGrid cols={5} spacing={"sm"}>
+      <SimpleGrid
+        cols={5}
+        spacing={"sm"}
+        breakpoints={[
+          { maxWidth: "md", cols: 5, spacing: "sm" },
+          { maxWidth: "sm", cols: 3, spacing: "sm" },
+          { maxWidth: "xs", cols: 2, spacing: "xs" },
+        ]}
+      >
         {items.map((data) => {
           return <SingleTokenOverview key={data.token} data={data} />;
         })}
       </SimpleGrid>
 
-      <Center mt={20}>
+      <Center my={30}>
         {filteredItems.length > 0 ? (
           <Pagination
             page={activePage}
@@ -182,6 +198,6 @@ export function CollectionPage() {
           <Text>Sorry bro, no thugs found!</Text>
         )}
       </Center>
-    </>
+    </BaseLayout>
   );
 }

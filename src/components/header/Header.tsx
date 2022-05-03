@@ -14,6 +14,7 @@ import { useBooleanToggle } from "@mantine/hooks";
 import { BrandTwitter, BrandDiscord } from "tabler-icons-react";
 import { InfamousLogo } from "../InfamousLogo";
 import { useNavigate } from "react-router-dom";
+import { InfamousBirdzLogo } from "../InfamousBirdzLogo";
 
 const useStyles = createStyles((theme) => ({
   inner: {

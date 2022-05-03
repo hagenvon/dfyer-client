@@ -8,7 +8,7 @@ import {
 } from "@mantine/core";
 import { useMetaplexMetadata } from "../../hooks/useMetaplexMetadata";
 import { PublicKey } from "@solana/web3.js";
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { BurnActionButton } from "./BurnActionButton";
 import { useSelector } from "react-redux";
 import { selectOwnedTokens } from "../../redux/metadataSelectors";
@@ -16,6 +16,8 @@ import { getIsBurnt } from "../../helper/getAttribute";
 import { ImageLoader } from "../ImageLoader";
 import { useNavigate } from "react-router-dom";
 import { InfamousData } from "../../models/InfamousMap";
+import { selectListingById } from "../../redux/listingsState";
+import { RootState } from "../../redux/store";
 
 interface SingleTokenOverviewProps {
   data: InfamousData;
@@ -47,6 +49,9 @@ export function SingleTokenOverview({ data }: SingleTokenOverviewProps) {
   const metadata = useMetaplexMetadata(new PublicKey(token));
   const navigate = useNavigate();
   const ownedTokens = useSelector(selectOwnedTokens);
+  const tokenListing = useSelector((state: RootState) =>
+    selectListingById(state.listings, token)
+  );
   const isTokenOwned = ownedTokens.includes(token);
 
   const handleClick = () => {
@@ -54,13 +59,8 @@ export function SingleTokenOverview({ data }: SingleTokenOverviewProps) {
   };
 
   return (
-    <Card
-      shadow="sm"
-      p="xs"
-      style={{ cursor: "pointer", width: "100%" }}
-      onClick={handleClick}
-    >
-      <Card.Section>
+    <Card shadow="sm" p="xs">
+      <Card.Section onClick={handleClick} style={{ cursor: "pointer" }}>
         <ImageLoader src={metadata?.image} width={"100%"} />
       </Card.Section>
 
@@ -73,14 +73,24 @@ export function SingleTokenOverview({ data }: SingleTokenOverviewProps) {
       </Card.Section>
 
       <Card.Section className={classes.sectionBorderless}>
-        <Group position="apart">
-          <Text size={"sm"} weight={500}>
-            Score: {getScore(rarityScore)}
-          </Text>
-        </Group>
+        <Badge color="blue" variant="light">
+          Score: {getScore(rarityScore)}
+        </Badge>
         {isTokenOwned && (
           <Badge color="pink" variant="light">
             {"Owned"}
+          </Badge>
+        )}
+        {tokenListing && (
+          <Badge
+            color="green"
+            variant="light"
+            onClick={() => {
+              window.location.href =
+                "https://magiceden.io/item-details/" + token;
+            }}
+          >
+            {`On Sale: ${tokenListing.price} SOL`}
           </Badge>
         )}
       </Card.Section>

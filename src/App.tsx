@@ -34,6 +34,7 @@ import { GlobalStyles } from "./components/GlobalStyles";
 import { findOwnedTokens, setOwnedTokens } from "./redux/uiState";
 import { CollectionPage } from "./views/CollectionPage";
 import { NotificationsProvider } from "@mantine/notifications";
+import { LandingPage } from "./views/LandingPage";
 
 const App: FC = () => {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -120,12 +121,11 @@ const Content: FC = () => {
   }, []);
 
   return (
-    <BaseLayout>
-      <Routes>
-        <Route path="/" element={<MultipleTokenPage />} />
-        <Route path="/thug/:token" element={<SingleTokenPage />} />
-        <Route path="/rarity" element={<CollectionPage />} />
-      </Routes>
-    </BaseLayout>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/gang" element={<MultipleTokenPage />} />
+      <Route path="/thug/:token" element={<SingleTokenPage />} />
+      <Route path="/rarity" element={<CollectionPage />} />
+    </Routes>
   );
 };

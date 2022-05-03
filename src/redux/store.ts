@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import uiReducer from "./uiState";
 import metadataReducer from "./metadataState";
 import rarityReducer from "./rarityState";
+import listingsReducer from "./listingsState";
 
 export const store = configureStore({
   reducer: {
     ui: uiReducer,
     metadata: metadataReducer,
     rarity: rarityReducer,
+    listings: listingsReducer,
   },
 });
 
