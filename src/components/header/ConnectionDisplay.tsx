@@ -14,7 +14,7 @@ export function ConnectionDisplay() {
           padding: "4px",
         }}
       >
-        {/*<Balance />*/}
+        <Balance />
         <ConnectButton />
       </Box>
     </Container>

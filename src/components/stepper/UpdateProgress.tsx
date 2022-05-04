@@ -7,7 +7,7 @@ import {
   setActiveTransactionState,
 } from "../../redux/uiState";
 import { ProgressStepper } from "./Stepper";
-import { IUpdateState } from "../../models/IUpdateState";
+import { IUpdateState, nonActiveUpdateStates } from "../../models/IUpdateState";
 import { getMetadata } from "../../api/metadata.api";
 
 export function UpdateProgress() {
@@ -15,18 +15,18 @@ export function UpdateProgress() {
   const activeUpdates: ActiveUpdateDetails[] = useSelector(
     selectAllActiveUpdates
   );
-  let interval: NodeJS.Timer;
+  let intervals: NodeJS.Timer[] = [];
 
   useEffect(() => {
+    intervals.forEach((interval) => clearInterval(interval));
+
     if (activeUpdates.length) {
-      interval = setInterval(() => {
-        let counter = 0;
-        activeUpdates.forEach(async (activeUpdate) => {
-          if (
-            ![IUpdateState.INVALID, IUpdateState.COMPLETED].includes(
-              activeUpdate.state
-            )
-          ) {
+      activeUpdates
+        .filter((activeUpdate) => {
+          return !nonActiveUpdateStates.includes(activeUpdate.state);
+        })
+        .forEach((activeUpdate, index) => {
+          intervals[index] = setInterval(async () => {
             const state = await getUpdateState(activeUpdate.signature);
             dispatch(
               setActiveTransactionState({
@@ -38,25 +38,15 @@ export function UpdateProgress() {
               // @ts-ignore
               await dispatch(getMetadata(activeUpdate.token));
             }
-
-            counter++;
-          }
+          }, 1000);
         });
-        // clear if no request was fired
-        if (!counter) {
-          clearInterval(interval);
-        }
-      }, 1000);
-    } else {
-      // clear if list is empty
-      clearInterval(interval);
     }
 
     // clear on unmount
     return () => {
-      clearInterval(interval);
+      intervals.forEach((interval) => clearInterval(interval));
     };
-  }, []);
+  }, [activeUpdates]);
 
   return (
     <>

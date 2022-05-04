@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   endUpdating,
   setActiveTransactionState,
+  startActiveTransaction,
   startUpdating,
 } from "../../redux/uiState";
 import { useMintBalance } from "../../hooks/useMintBalance";
@@ -32,9 +33,6 @@ export function UpdateActionButton({ update, token }: UpdateActionButtonProps) {
   const modals = useModals();
   const connection = getConnection();
   const dispatch = useDispatch();
-
-  const { fetchBalance } = useSolBalance();
-  const { fetchButterBalance } = useMintBalance();
 
   const onConfirm = async () => {
     if (!publicKey) {
@@ -60,7 +58,7 @@ export function UpdateActionButton({ update, token }: UpdateActionButtonProps) {
       });
 
       dispatch(
-        setActiveTransactionState({ state: transactionCreated, signature })
+        startActiveTransaction({ state: transactionCreated, signature, token })
       );
       dispatch(startUpdating());
 

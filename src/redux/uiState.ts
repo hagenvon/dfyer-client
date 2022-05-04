@@ -3,7 +3,11 @@ import { getConnection } from "../helper/getConnection";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import * as splToken from "@solana/spl-token";
 import { getInfamousTokens } from "../helper/getOwnedTokens";
-import { IUpdateState, UpdateStateUpdatePayload } from "../models/IUpdateState";
+import {
+  IUpdateState,
+  nonActiveUpdateStates,
+  UpdateStateUpdatePayload,
+} from "../models/IUpdateState";
 
 export interface ActiveUpdateDetails {
   state: IUpdateState;
@@ -41,6 +45,8 @@ export const fetchSolBalance = createAsyncThunk<number, PublicKey>(
   async (publicKey: PublicKey): Promise<number> => {
     const connection = getConnection();
     const result = await connection.getBalance(publicKey);
+
+    console.log("SOL:", result);
     return (result / LAMPORTS_PER_SOL) as number;
   }
 );
@@ -82,12 +88,7 @@ export const uiStateSlice = createSlice({
       // filter completed updates
       Object.entries(state.activeUpdates)
         .filter(([key, value]) => {
-          return (
-            value &&
-            ![IUpdateState.INVALID, IUpdateState.COMPLETED].includes(
-              value.state
-            )
-          );
+          return value && !nonActiveUpdateStates.includes(value.state);
         })
         .forEach(([signature, updateState]) => {
           newActiveUpdates[signature] = updateState;
@@ -97,6 +98,14 @@ export const uiStateSlice = createSlice({
     },
     setOwnedTokens: (state, action: PayloadAction<string[]>) => {
       state.ownedTokens = [...action.payload];
+    },
+    startActiveTransaction: (
+      state,
+      action: PayloadAction<ActiveUpdateDetails>
+    ) => {
+      state.activeUpdates[action.payload.signature] = {
+        ...action.payload,
+      };
     },
     setActiveTransactionState: (
       state,
@@ -132,6 +141,7 @@ export const {
   endUpdating,
   setOwnedTokens,
   setActiveTransactionState,
+  startActiveTransaction,
 } = uiStateSlice.actions;
 
 export default uiStateSlice.reducer;

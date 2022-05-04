@@ -9,12 +9,11 @@ export function useSolBalance() {
   const dispatch = useDispatch();
   const balance = useSelector((state: RootState) => state.ui.solBalance);
 
-  // @ts-ignore
-  const fetchBalance = () => dispatch(fetchSolBalance(publicKey));
-
   useEffect(() => {
-    fetchBalance();
-  }, [publicKey, fetchBalance]);
+    console.log("SOL BANVECECECE");
+    // @ts-ignore
+    dispatch(fetchSolBalance(publicKey));
+  }, []);
 
-  return { balance, fetchBalance };
+  return { balance };
 }

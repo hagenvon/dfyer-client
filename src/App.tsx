@@ -121,11 +121,13 @@ const Content: FC = () => {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/gang" element={<MultipleTokenPage />} />
-      <Route path="/thug/:token" element={<SingleTokenPage />} />
-      <Route path="/rarity" element={<CollectionPage />} />
-    </Routes>
+    <BaseLayout>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/gang" element={<MultipleTokenPage />} />
+        <Route path="/thug/:token" element={<SingleTokenPage />} />
+        <Route path="/collection" element={<CollectionPage />} />
+      </Routes>
+    </BaseLayout>
   );
 };

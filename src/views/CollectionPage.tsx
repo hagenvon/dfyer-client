@@ -12,6 +12,7 @@ import {
   Collapse,
   Group,
   Button,
+  Alert,
 } from "@mantine/core";
 import { ThugGang } from "../components/headlines/ThugGang";
 import { useState } from "react";
@@ -27,7 +28,7 @@ import {
 } from "../redux/selectors";
 import { Editions } from "../models/Rarity.models";
 import { fetchListings } from "../redux/listingsState";
-import { BaseLayout } from "./BaseLayout";
+import { Crown, Flame } from "tabler-icons-react";
 
 export function CollectionPage() {
   const [activePage, setPage] = useState(1);
@@ -134,7 +135,7 @@ export function CollectionPage() {
   );
 
   return (
-    <BaseLayout>
+    <>
       <Grid>
         <Grid.Col>
           <Box mb={12} mt={10} style={{ alignItems: "flex-start" }}>
@@ -147,16 +148,36 @@ export function CollectionPage() {
         <Group spacing={15}>
           <SegmentedControl
             data={[
-              { label: "Classic", value: "infamous" },
-              { label: "Burnt", value: "burnt" },
+              {
+                label: (
+                  <Center>
+                    <Crown size={16} />
+                    <Box ml={10}>Classic Thugs</Box>
+                  </Center>
+                ),
+                value: "infamous",
+              },
+              // {
+              //   label: (
+              //     <Center>
+              //       <Flame size={16} />
+              //       <Box ml={10}>Burnt Thugs</Box>
+              //     </Center>
+              //   ),
+              //   value: "burnt",
+              // },
             ]}
             onChange={(val) => dispatch(setEdition(val as Editions))}
           />
-          <Text size={"sm"}>Showing: {filteredItems.length} thugs</Text>
         </Group>
-        <Button size="xs" onClick={() => setFilterOpened(!filterOpened)}>
-          {filterOpened ? "Hide Filter" : "Show Filter"}
-        </Button>
+        <Group>
+          <Alert py={5} px={15} color={"gray"}>
+            <Text size={"sm"}>Showing: {filteredItems.length} thugs</Text>
+          </Alert>
+          <Button size="xs" onClick={() => setFilterOpened(!filterOpened)}>
+            {filterOpened ? "Hide Filter" : "Show Filter"}
+          </Button>
+        </Group>
       </Group>
 
       <Collapse in={filterOpened}>
@@ -198,6 +219,6 @@ export function CollectionPage() {
           <Text>Sorry bro, no thugs found!</Text>
         )}
       </Center>
-    </BaseLayout>
+    </>
   );
 }

@@ -1,48 +1,57 @@
-import { Alert, Box, Code, Stepper, Text } from "@mantine/core";
+import { Alert, Stepper, Text } from "@mantine/core";
 import { IUpdateState } from "../../models/IUpdateState";
 import { useSelector } from "react-redux";
 import { selectActiveTransactionState } from "../../redux/metadataSelectors";
 import { RootState } from "../../redux/store";
+import { X } from "tabler-icons-react";
 
 export function ProgressStepper({ signature }: { signature: string }) {
   const update = useSelector((state: RootState) =>
     selectActiveTransactionState(state, signature)
   );
 
-  let active = 0;
+  const getSteps = (state: IUpdateState) => [
+    {
+      label: "Process Transaction (Solana)",
+      loading: state === IUpdateState.CREATED,
+      failed: state === IUpdateState.NOT_CONFIRMED,
+      message: "Not confirmed",
+    },
+    {
+      label: "Verify Transaction",
+      loading: state === IUpdateState.CONFIRMED,
+      failed: state === IUpdateState.INVALID,
+      message: "Transaction invalid",
+    },
+    {
+      label: "Create Files",
+      loading: [IUpdateState.VALIDATED, IUpdateState.RENDERING].includes(state),
+      failed: false,
+      message: "Rendering failed",
+    },
+    {
+      label: "Upload Files",
+      loading: state === IUpdateState.RENDERED,
+      failed: false,
+      message: "Rendering failed",
+    },
+    {
+      label: "Update Metadata (Solana)",
+      loading: [
+        IUpdateState.FILES_UPLOADED,
+        IUpdateState.METADATA_UPDATE_TX_CREATED,
+      ].includes(state),
+      failed: false,
+      message: "Update Transaction failed",
+    },
+  ];
 
-  switch (update.state) {
-    case IUpdateState.CREATED:
-      active = 0;
-      break;
-    case IUpdateState.CONFIRMED:
-      active = 1;
-      break;
-    case IUpdateState.INVALID:
-      active = 1;
-      break;
-    case IUpdateState.VALIDATED:
-      active = 2;
-      break;
-    case IUpdateState.RENDERING:
-      active = 2;
-      break;
-    case IUpdateState.RENDERED:
-      active = 3;
-      break;
-    case IUpdateState.FILES_UPLOADED:
-      active = 4;
-      break;
-    case IUpdateState.METADATA_UPDATE_TX_CREATED:
-      active = 4;
-      break;
-    case IUpdateState.COMPLETED:
-      active = 5;
-      break;
+  const steps = getSteps(update.state);
 
-    default:
-      active = 0;
-  }
+  const active =
+    update.state === IUpdateState.COMPLETED
+      ? steps.length
+      : steps.findIndex((it) => it.loading || it.failed);
 
   return (
     <>
@@ -51,17 +60,15 @@ export function ProgressStepper({ signature }: { signature: string }) {
       </Alert>
 
       <Stepper active={active} orientation="vertical" size={"xs"} mb={25}>
-        <Stepper.Step
-          label="Process Transaction (Solana)"
-          loading={active === 0}
-        />
-        <Stepper.Step label="Verify Transaction" loading={active === 1} />
-        <Stepper.Step label="Create Files" loading={active === 2} />
-        <Stepper.Step label="Upload Files" loading={active === 3} />
-        <Stepper.Step
-          label="Updating Metadata (Solana)"
-          loading={active === 4}
-        />
+        {steps.map(({ loading, failed, message, label }) => (
+          <Stepper.Step
+            label={label}
+            loading={loading}
+            color={failed ? "red" : ""}
+            description={failed ? message : ""}
+            progressIcon={failed ? <X color={"red"} /> : null}
+          />
+        ))}
       </Stepper>
     </>
   );

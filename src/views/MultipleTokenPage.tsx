@@ -2,11 +2,10 @@ import { TokenList } from "../components/TokenList";
 import React from "react";
 import { Box, Grid } from "@mantine/core";
 import { ThugGang } from "../components/headlines/ThugGang";
-import { BaseLayout } from "./BaseLayout";
 
 export function MultipleTokenPage() {
   return (
-    <BaseLayout>
+    <>
       <Grid>
         <Grid.Col>
           <Box mb={12} mt={10} style={{ alignItems: "flex-start" }}>
@@ -16,6 +15,6 @@ export function MultipleTokenPage() {
       </Grid>
 
       <TokenList />
-    </BaseLayout>
+    </>
   );
 }

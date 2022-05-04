@@ -56,7 +56,7 @@ export function TokenCard({ token }: TokenCardProps) {
   ));
 
   const handleCustomize = () => {
-    navigate("thug/" + token);
+    navigate("/thug/" + token);
   };
 
   return (

@@ -19,17 +19,18 @@ export const BaseLayout: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <HeaderMiddle
         links={[
-          { link: "/", label: "Gang" },
-          { link: "", label: "Upgrade" },
-          { link: "/rarity", label: "Rarity" },
+          { link: "/collection", label: "Collection" },
+          { link: "/gang", label: "Gang" },
         ]}
       />
-      <ConnectionDisplay />
+      <div>
+        <ConnectionDisplay />
+      </div>
 
-      <main>
+      <main style={{ flexGrow: 1 }}>
         <Container>{children}</Container>
       </main>
       <FooterDefault />

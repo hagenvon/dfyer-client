@@ -1,8 +1,15 @@
 import React from "react";
-import { createStyles, Container, Group, ActionIcon } from "@mantine/core";
+import {
+  createStyles,
+  Container,
+  Group,
+  ActionIcon,
+  Text,
+} from "@mantine/core";
 import { BrandTwitter, BrandDiscord } from "tabler-icons-react";
 import { InfamousLogo } from "../InfamousLogo";
 import { ThemeToggle } from "../ThemeToggler";
+const version = require("../../../package.json").version;
 
 const useStyles = createStyles((theme) => ({
   footer: {
@@ -21,12 +28,14 @@ const useStyles = createStyles((theme) => ({
 
     [theme.fn.smallerThan("xs")]: {
       flexDirection: "column",
+      alignItems: "center",
     },
   },
 
   links: {
     [theme.fn.smallerThan("xs")]: {
-      marginTop: theme.spacing.md,
+      marginTop: theme.spacing.lg,
+      marginBottom: theme.spacing.lg,
     },
   },
 }));
@@ -41,6 +50,9 @@ export function FooterDefault() {
       <Container className={classes.inner}>
         <Group direction={"column"} spacing={0}>
           <InfamousLogo height={24} fill={isLightTheme ? "#333" : "#fff"} />
+          <Text mt={5} size={"xs"}>
+            A Solana OG Derivative by hhkonz @ 2022 | DFyer {version}
+          </Text>
         </Group>
 
         <Group
@@ -57,7 +69,11 @@ export function FooterDefault() {
             <BrandDiscord size={32} strokeWidth={1} />
           </ActionIcon>
         </Group>
-        <Group direction={"column"} spacing={0} align={"flex-end"}>
+        <Group
+          direction={"column"}
+          spacing={0}
+          align={theme.fn.smallerThan("xs") ? "center" : "flex-end"}
+        >
           {isLightTheme
             ? "I don't trust light themes!"
             : "I don't trust dark themes!"}

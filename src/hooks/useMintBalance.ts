@@ -27,7 +27,7 @@ export function useMintBalance() {
 
   useEffect(() => {
     fetchButterBalance();
-  }, [publicKey, connection, mintPublicKey]);
+  }, []);
 
   return { butterBalance, fetchButterBalance };
 }

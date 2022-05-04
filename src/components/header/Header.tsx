@@ -9,12 +9,13 @@ import {
   Navbar,
   Drawer,
   Button,
+  Box,
+  Stack,
 } from "@mantine/core";
 import { useBooleanToggle } from "@mantine/hooks";
 import { BrandTwitter, BrandDiscord } from "tabler-icons-react";
 import { InfamousLogo } from "../InfamousLogo";
-import { useNavigate } from "react-router-dom";
-import { InfamousBirdzLogo } from "../InfamousBirdzLogo";
+import { useLocation, useNavigate, useRoutes } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -70,6 +71,10 @@ const useStyles = createStyles((theme) => ({
         theme.colorScheme === "dark"
           ? theme.colors.dark[6]
           : theme.colors.gray[0],
+      color:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[0]
+          : theme.colors.gray[7],
     },
   },
 
@@ -90,21 +95,23 @@ interface HeaderMiddleProps {
 }
 
 export function HeaderMiddle({ links }: HeaderMiddleProps) {
+  const location = useLocation();
   const [opened, toggleOpened] = useBooleanToggle(false);
   const [active, setActive] = useState(links[0].link);
   const { classes, cx, theme } = useStyles();
   const navigate = useNavigate();
+
+  const isLandingPage = location.pathname === "/";
 
   const items = links.map((link) => (
     <a
       key={link.label}
       href={link.link}
       className={cx(classes.link, {
-        [classes.linkActive]: active === link.link,
+        [classes.linkActive]: location.pathname === link.link,
       })}
       onClick={(event) => {
         event.preventDefault();
-        setActive(link.link);
         navigate(link.link);
       }}
     >
@@ -127,17 +134,31 @@ export function HeaderMiddle({ links }: HeaderMiddleProps) {
           </Group>
 
           <Group>
-            <InfamousLogo
-              fill={theme.colorScheme === "light" ? "#333" : "#fff"}
-              height={32}
-            />
+            {!isLandingPage && (
+              <Box onClick={() => navigate("/")}>
+                <InfamousLogo
+                  fill={theme.colorScheme === "light" ? "#333" : "#fff"}
+                  height={32}
+                />
+              </Box>
+            )}
           </Group>
 
           <Group spacing={0} className={classes.social} position="right" noWrap>
-            <ActionIcon size="lg">
+            <ActionIcon
+              size="lg"
+              onClick={() =>
+                window.location.assign("https://twitter.com/infamousBirdz")
+              }
+            >
               <BrandTwitter size={24} strokeWidth={1.5} />
             </ActionIcon>
-            <ActionIcon size="lg">
+            <ActionIcon
+              size="lg"
+              onClick={() =>
+                window.location.assign("https://discord.gg/Kv4PTfq3ep")
+              }
+            >
               <BrandDiscord size={24} strokeWidth={1.5} />
             </ActionIcon>
           </Group>
@@ -146,16 +167,15 @@ export function HeaderMiddle({ links }: HeaderMiddleProps) {
       <Drawer
         opened={opened}
         onClose={() => toggleOpened(false)}
-        title="Register"
+        title="Infamous Menu"
         padding="xl"
-        size="xl"
+        size="lg"
       >
         <Navbar height={600} p="xs" width={{ base: 300 }}>
           <Navbar.Section>{/* Header with logo */}</Navbar.Section>
           <Navbar.Section grow mt="md">
             {/* Links sections */}
-
-            {items}
+            <Stack spacing={8}>{items}</Stack>
           </Navbar.Section>
           <Navbar.Section>{/* Footer with user */}</Navbar.Section>
         </Navbar>

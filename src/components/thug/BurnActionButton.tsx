@@ -29,8 +29,6 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
   const modals = useModals();
   const connection = getConnection();
   const dispatch = useDispatch();
-  const { fetchBalance } = useSolBalance();
-  const { fetchButterBalance } = useMintBalance();
   const theme = useMantineTheme();
 
   const onConfirm = async () => {
@@ -59,9 +57,6 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
         setActiveTransactionState({ state: transactionCreated, signature })
       );
       dispatch(startUpdating());
-
-      fetchBalance();
-      fetchButterBalance();
     } catch (error) {
       console.log("TX failed", error);
     }

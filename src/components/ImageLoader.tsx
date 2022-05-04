@@ -27,6 +27,7 @@ export function ImageLoader({
             position: "relative",
             backgroundColor: "gray",
             paddingBottom: "100%",
+            zIndex: 1,
           }}
         >
           <LoadingOverlay visible={true} />
