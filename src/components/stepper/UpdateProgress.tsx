@@ -4,11 +4,14 @@ import React, { useEffect } from "react";
 import { getUpdateState } from "../../api/updateTrait";
 import {
   ActiveUpdateDetails,
+  endUpdating,
+  markActiveTransactionAsSuccess,
   setActiveTransactionState,
 } from "../../redux/uiState";
 import { ProgressStepper } from "./Stepper";
 import { IUpdateState, nonActiveUpdateStates } from "../../models/IUpdateState";
-import { getMetadata } from "../../api/metadata.api";
+import { fetchMetadata } from "../../redux/metadataState";
+import { Group, Text, Button, Alert } from "@mantine/core";
 
 export function UpdateProgress() {
   const dispatch = useDispatch();
@@ -36,7 +39,10 @@ export function UpdateProgress() {
             );
             if (state === IUpdateState.COMPLETED) {
               // @ts-ignore
-              await dispatch(getMetadata(activeUpdate.token));
+              await dispatch(fetchMetadata(activeUpdate.token));
+              await dispatch(
+                markActiveTransactionAsSuccess(activeUpdate.signature)
+              );
             }
           }, 1000);
         });
@@ -50,12 +56,25 @@ export function UpdateProgress() {
 
   return (
     <>
-      {activeUpdates.map((activeUpdates) => {
+      {activeUpdates.map((activeUpdate) => {
         return (
-          <ProgressStepper
-            signature={activeUpdates.signature}
-            key={activeUpdates.signature}
-          />
+          <div key={activeUpdate.signature}>
+            <ProgressStepper signature={activeUpdate.signature} />
+
+            {activeUpdate.showSuccess && (
+              <Alert color={"green"} variant={"light"} p={10}>
+                <Text mb={10}>Booom! Thug successfully updated!</Text>
+                <Button
+                  variant={"outline"}
+                  color={"green"}
+                  onClick={() => dispatch(endUpdating())}
+                  fullWidth={true}
+                >
+                  OK, Thanks!
+                </Button>
+              </Alert>
+            )}
+          </div>
         );
       })}
     </>

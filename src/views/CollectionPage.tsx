@@ -13,13 +13,24 @@ import {
   Group,
   Button,
   Alert,
+  Chip,
+  Card,
 } from "@mantine/core";
 import { ThugGang } from "../components/headlines/ThugGang";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { InfamousData } from "../models/InfamousMap";
-import { selectAllFilters, selectAllWeights } from "../redux/raritySelectors";
-import { setEdition, setFilters, setWeight } from "../redux/rarityState";
+import {
+  selectAllActiveFilters,
+  selectAllFilters,
+  selectAllWeights,
+} from "../redux/raritySelectors";
+import {
+  removeFilter,
+  setEdition,
+  setFilters,
+  setWeight,
+} from "../redux/rarityState";
 import { SingleTokenOverview } from "../components/thug/SingleTokenOverview";
 import {
   selectCountedAttributes,
@@ -29,6 +40,7 @@ import {
 import { Editions } from "../models/Rarity.models";
 import { fetchListings } from "../redux/listingsState";
 import { Crown, Flame } from "tabler-icons-react";
+import { stringifyFilterTrait } from "../helper/filterTraitString";
 
 export function CollectionPage() {
   const [activePage, setPage] = useState(1);
@@ -39,6 +51,8 @@ export function CollectionPage() {
 
   const filters = useSelector(selectAllFilters);
   const filteredItems = useSelector(selectFilteredInfamousData);
+
+  const allActiveFilter = useSelector(selectAllActiveFilters);
 
   const traitWeights = useSelector(selectAllWeights);
   const dispatch = useDispatch();
@@ -94,6 +108,14 @@ export function CollectionPage() {
     dispatch(setFilters({ ...filters, [traitType]: values }));
   };
 
+  const handleRemoveFilter = (filterString: string) => {
+    dispatch(removeFilter(filterString));
+  };
+
+  const handleClearAllFilters = () => {
+    dispatch(setFilters({}));
+  };
+
   const filterItems = Object.entries(countedAttributes).map(
     ([trait_type, valueCounter]) => {
       const options = Object.keys(valueCounter).map((value) => {
@@ -111,6 +133,7 @@ export function CollectionPage() {
             label={trait_type}
             placeholder="Please select"
             onChange={handleChange(trait_type)}
+            value={filters[trait_type] || []}
             mb={0}
           />
 
@@ -174,11 +197,46 @@ export function CollectionPage() {
           <Alert py={5} px={15} color={"gray"}>
             <Text size={"sm"}>Showing: {filteredItems.length} thugs</Text>
           </Alert>
-          <Button size="xs" onClick={() => setFilterOpened(!filterOpened)}>
+          <Button
+            size="xs"
+            onClick={() => setFilterOpened(!filterOpened)}
+            variant={"outline"}
+          >
             {filterOpened ? "Hide Filter" : "Show Filter"}
           </Button>
         </Group>
       </Group>
+
+      {allActiveFilter.length > 0 && (
+        <Card mb={16}>
+          <Group position={"apart"} mb={16}>
+            <Text size={"sm"}>Active Filter:</Text>{" "}
+            <Button
+              size={"xs"}
+              variant={"outline"}
+              onClick={handleClearAllFilters}
+            >
+              Clear All
+            </Button>
+          </Group>
+
+          <Group>
+            {allActiveFilter.map((trait) => {
+              const filterString = stringifyFilterTrait(trait);
+              return (
+                <Chip
+                  key={filterString}
+                  value={filterString}
+                  checked={true}
+                  onClick={() => handleRemoveFilter(filterString)}
+                >
+                  {trait.trait_type}: {trait.value}
+                </Chip>
+              );
+            })}
+          </Group>
+        </Card>
+      )}
 
       <Collapse in={filterOpened}>
         <SimpleGrid

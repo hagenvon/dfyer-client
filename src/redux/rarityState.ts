@@ -12,7 +12,7 @@ const initialState: RarityState = {
   weights: {
     Type: 1,
     Model: 0,
-    "Gang Role": 0.2,
+    "Gang Role": 0.1,
     "Favorite Rapper": 0,
     Look: 0,
     Background: 1,
@@ -24,7 +24,7 @@ const initialState: RarityState = {
     Chain: 1,
     Earring: 1,
     Tattoo: 1,
-    "Head accessories": 1,
+    "Head accessories": 0.66,
   },
   filters: {},
   edition: "infamous",

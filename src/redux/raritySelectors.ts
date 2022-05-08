@@ -1,5 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "./store";
+import { parseFilterTraitString } from "../helper/filterTraitString";
 
 export const selectRarityState = (state: RootState) => state.rarity;
 
@@ -16,4 +17,11 @@ export const selectAllWeights = createSelector(
 export const selectEdition = createSelector(
   [selectRarityState],
   (state) => state.edition
+);
+
+export const selectAllActiveFilters = createSelector(
+  [selectAllFilters],
+  (filters) => {
+    return Object.values(filters).flat().map(parseFilterTraitString);
+  }
 );

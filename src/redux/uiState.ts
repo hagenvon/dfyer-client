@@ -13,6 +13,7 @@ export interface ActiveUpdateDetails {
   state: IUpdateState;
   token: string;
   signature: string;
+  showSuccess: boolean;
 }
 
 type ActiveUpdates = {
@@ -105,6 +106,7 @@ export const uiStateSlice = createSlice({
     ) => {
       state.activeUpdates[action.payload.signature] = {
         ...action.payload,
+        showSuccess: false,
       };
     },
     setActiveTransactionState: (
@@ -113,6 +115,9 @@ export const uiStateSlice = createSlice({
     ) => {
       state.activeUpdates[action.payload.signature].state =
         action.payload.state;
+    },
+    markActiveTransactionAsSuccess: (state, action: PayloadAction<string>) => {
+      state.activeUpdates[action.payload].showSuccess = true;
     },
     // incrementByAmount: (state, action: PayloadAction<number>) => {
     //     state.value += action.payload
@@ -142,6 +147,7 @@ export const {
   setOwnedTokens,
   setActiveTransactionState,
   startActiveTransaction,
+  markActiveTransactionAsSuccess,
 } = uiStateSlice.actions;
 
 export default uiStateSlice.reducer;

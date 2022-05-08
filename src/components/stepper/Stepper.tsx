@@ -62,6 +62,7 @@ export function ProgressStepper({ signature }: { signature: string }) {
       <Stepper active={active} orientation="vertical" size={"xs"} mb={25}>
         {steps.map(({ loading, failed, message, label }) => (
           <Stepper.Step
+            key={label}
             label={label}
             loading={loading}
             color={failed ? "red" : ""}

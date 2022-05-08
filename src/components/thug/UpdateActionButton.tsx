@@ -58,7 +58,12 @@ export function UpdateActionButton({ update, token }: UpdateActionButtonProps) {
       });
 
       dispatch(
-        startActiveTransaction({ state: transactionCreated, signature, token })
+        startActiveTransaction({
+          state: transactionCreated,
+          signature,
+          token,
+          showSuccess: false,
+        })
       );
       dispatch(startUpdating());
 
