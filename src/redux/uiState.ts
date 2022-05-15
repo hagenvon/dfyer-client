@@ -119,6 +119,7 @@ export const uiStateSlice = createSlice({
     markActiveTransactionAsSuccess: (state, action: PayloadAction<string>) => {
       state.activeUpdates[action.payload].showSuccess = true;
     },
+
     // incrementByAmount: (state, action: PayloadAction<number>) => {
     //     state.value += action.payload
     // },

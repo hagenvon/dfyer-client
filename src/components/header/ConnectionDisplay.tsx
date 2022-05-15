@@ -1,22 +1,20 @@
 import { Balance } from "../Balance";
-import { Box, Container } from "@mantine/core";
+import { Container, Group } from "@mantine/core";
 import React from "react";
 import { ConnectButton } from "../connect-button/ConnectButton";
+import { ClaimAllButton } from "./ClaimAllButton";
 
 export function ConnectionDisplay() {
   return (
-    <Container>
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "4px",
-        }}
-      >
-        <Balance />
+    <Container mb={12}>
+      <Group position={"apart"}>
+        <Group align={"center"}>
+          <Balance />
+          <ClaimAllButton />
+        </Group>
+
         <ConnectButton />
-      </Box>
+      </Group>
     </Container>
   );
 }

@@ -3,6 +3,7 @@ import uiReducer from "./uiState";
 import metadataReducer from "./metadataState";
 import rarityReducer from "./rarityState";
 import listingsReducer from "./listingsState";
+import claimReducer from "./claimState";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     metadata: metadataReducer,
     rarity: rarityReducer,
     listings: listingsReducer,
+    claims: claimReducer,
   },
 });
 

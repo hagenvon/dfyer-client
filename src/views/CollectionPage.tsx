@@ -15,6 +15,7 @@ import {
   Alert,
   Chip,
   Card,
+  Drawer,
 } from "@mantine/core";
 import { ThugGang } from "../components/headlines/ThugGang";
 import { useState } from "react";
@@ -24,12 +25,14 @@ import {
   selectAllActiveFilters,
   selectAllFilters,
   selectAllWeights,
+  selectShowWeights,
 } from "../redux/raritySelectors";
 import {
   removeFilter,
   setEdition,
   setFilters,
   setWeight,
+  showWeights,
 } from "../redux/rarityState";
 import { SingleTokenOverview } from "../components/thug/SingleTokenOverview";
 import {
@@ -37,7 +40,7 @@ import {
   selectFilteredInfamousData,
   selectInfamousDataWithScore,
 } from "../redux/selectors";
-import { Editions } from "../models/Rarity.models";
+import { Editions, Weights } from "../models/Rarity.models";
 import { fetchListings } from "../redux/listingsState";
 import { Crown, Flame } from "tabler-icons-react";
 import { stringifyFilterTrait } from "../helper/filterTraitString";
@@ -54,10 +57,13 @@ export function CollectionPage() {
 
   const allActiveFilter = useSelector(selectAllActiveFilters);
 
+  const isDrawerOpen = useSelector(selectShowWeights);
+
   const traitWeights = useSelector(selectAllWeights);
+
+  const [weights, updateWeights] = useState<Weights>({ ...traitWeights });
+
   const dispatch = useDispatch();
-  const onWeightChange = (type: string, weight: number) =>
-    dispatch(setWeight({ [type]: weight }));
 
   const getFinalWeight = (given: number | undefined) => {
     if (given === undefined) {
@@ -136,22 +142,6 @@ export function CollectionPage() {
             value={filters[trait_type] || []}
             mb={0}
           />
-
-          {/*<Text size={"xs"}>Weight:</Text>*/}
-          {/*<Slider*/}
-          {/*  size={3}*/}
-          {/*  value={getFinalWeight(traitWeights[trait_type])}*/}
-          {/*  onChange={(value) => onWeightChange(trait_type, value / 100)}*/}
-          {/*  marks={*/}
-          {/*    [*/}
-          {/*      // { value: 0, label: "0%" },*/}
-          {/*      // { value: 25, label: "25%" },*/}
-          {/*      // { value: 50, label: "50%" },*/}
-          {/*      // { value: 75, label: "75%" },*/}
-          {/*      // { value: 100, label: "100%" },*/}
-          {/*    ]*/}
-          {/*  }*/}
-          {/*/>*/}
         </Box>
       );
     }
@@ -159,6 +149,53 @@ export function CollectionPage() {
 
   return (
     <>
+      <Drawer
+        opened={isDrawerOpen}
+        onClose={() => dispatch(showWeights(false))}
+        title="Weights"
+        padding="xl"
+        size="xl"
+        position={"right"}
+      >
+        {/* Drawer content */}
+        <SimpleGrid cols={2}>
+          {Object.keys(countedAttributes).map((trait_type) => {
+            return (
+              <Box key={trait_type} mb={15}>
+                <Text size={"xs"} mb={10}>
+                  {trait_type}:
+                </Text>
+                <Slider
+                  size={3}
+                  value={getFinalWeight(weights[trait_type])}
+                  onChange={(value) => {
+                    updateWeights((prevWeights) => ({
+                      ...prevWeights,
+                      [trait_type]: value / 100,
+                    }));
+                  }}
+                  marks={
+                    [
+                      // { value: 0, label: "0%" },
+                      // { value: 25, label: "25%" },
+                      // { value: 50, label: "50%" },
+                      // { value: 75, label: "75%" },
+                      // { value: 100, label: "100%" },
+                    ]
+                  }
+                />
+              </Box>
+            );
+          })}
+        </SimpleGrid>
+        <Group mt={20}>
+          <Button onClick={() => dispatch(setWeight(weights))}>
+            Apply Weights
+          </Button>
+          <Button color={"gray"}>Cancel</Button>
+        </Group>
+      </Drawer>
+
       <Grid>
         <Grid.Col>
           <Box mb={12} mt={10} style={{ alignItems: "flex-start" }}>
@@ -197,6 +234,13 @@ export function CollectionPage() {
           <Alert py={5} px={15} color={"gray"}>
             <Text size={"sm"}>Showing: {filteredItems.length} thugs</Text>
           </Alert>
+          <Button
+            size="xs"
+            onClick={() => dispatch(showWeights(true))}
+            variant={"outline"}
+          >
+            Show Weights
+          </Button>
           <Button
             size="xs"
             onClick={() => setFilterOpened(!filterOpened)}

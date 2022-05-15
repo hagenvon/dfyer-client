@@ -1,22 +1,15 @@
-import {
-  Card,
-  Text,
-  useMantineTheme,
-  createStyles,
-  Badge,
-  LoadingOverlay,
-  Group,
-} from "@mantine/core";
-import { useAvailableUpdates } from "../../hooks/useAvailableUpdates";
+import { Card, Text, createStyles, LoadingOverlay } from "@mantine/core";
 import React from "react";
-import { UpdateActionButton } from "./UpdateActionButton";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { selectOwnedTokens } from "../../redux/metadataSelectors";
+import { ITraitUpdate } from "../../models/ITraitUpdate";
+import { UpdateItem } from "./UpdateItem";
+import { stringifyFilterTrait } from "../../helper/filterTraitString";
 
-interface TokenCardProps {
+interface AvailableUpdatesProps {
+  canUpdate: boolean;
+  availableTraits: ITraitUpdate[];
+  isFetching: boolean;
   token: string;
+  label: string;
 }
 
 const useStyles = createStyles((theme) => ({
@@ -27,64 +20,29 @@ const useStyles = createStyles((theme) => ({
     }`,
     flexWrap: "wrap",
   },
-  attribute: {
-    minWidth: "100%",
-    maxWidth: "100%",
-    padding: "3px 0",
-    flexWrap: "wrap",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
-    }`,
-  },
 }));
 
-export function AvailableUpdates({ token }: TokenCardProps) {
-  const { connected } = useWallet();
-  const { availableUpdates, isFetching } = useAvailableUpdates(token);
-  const isUpdating: boolean = useSelector(
-    (state: RootState) => state.ui.isUpdating
-  );
+export function AvailableUpdates({
+  canUpdate,
+  availableTraits,
+  isFetching,
+  token,
+  label,
+}: AvailableUpdatesProps) {
+  const { classes } = useStyles();
 
-  const ownedTokens = useSelector(selectOwnedTokens);
-  const isTokenOwned = ownedTokens.includes(token);
-
-  const canUpdate = isTokenOwned && connected;
-
-  const { classes, theme } = useStyles();
-
-  const items = availableUpdates.map((update, index) => (
-    <div key={index} className={classes.attribute}>
-      <Group spacing={12}>
-        <div>
-          <Text size="xs" color="dimmed">
-            {update.trait_type}
-          </Text>
-          <Text weight={500} size="sm">
-            {update.value}
-          </Text>
-        </div>
-        <div>
-          {update.isCustomTrait && <Badge color="primary">Upgrade</Badge>}
-        </div>
-      </Group>
-      <Group spacing={4}>
-        <Badge color="green" variant="light">
-          {update.solPrize} SOL
-        </Badge>
-        <Badge color="blue" variant="light">
-          {update.butterPrize} BUTTER
-        </Badge>
-        {canUpdate && <UpdateActionButton token={token} update={update} />}
-      </Group>
-    </div>
+  const items = availableTraits.map((update, index) => (
+    <UpdateItem
+      update={update}
+      canUpdate={canUpdate}
+      token={token}
+      key={stringifyFilterTrait(update)}
+    />
   ));
 
   return (
-    <Card shadow="sm" p="md" component={"div"}>
-      <Text weight={500}>Available Updates:</Text>
+    <Card shadow="sm" p="md" component={"div"} mb={"md"}>
+      <Text weight={500}>{label}</Text>
       {/*<LoadingOverlay visible={isUpdating} />*/}
 
       <Card.Section className={classes.attributes}>

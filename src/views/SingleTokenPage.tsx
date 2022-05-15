@@ -1,23 +1,15 @@
-import {
-  Box,
-  Card,
-  Grid,
-  Group,
-  Modal,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
+import { Box, Card, Grid, Group, Text } from "@mantine/core";
 import { SingleToken } from "../components/thug/SingleToken";
 import { Link, useParams } from "react-router-dom";
-import { AvailableUpdates } from "../components/thug/AvailableUpdates";
 import React from "react";
 import { ThugDetails } from "../components/headlines/ThugDetails";
 import { useSelector } from "react-redux";
 import { selectOwnedTokens } from "../redux/metadataSelectors";
+import { AvailableUpdatesWrapper } from "../components/thug/AvailableUpdatesWrapper";
+import { TokenThumbnail } from "../components/thug/TokenThumbnail";
 
 export function SingleTokenPage() {
   const { token } = useParams();
-  const ccd = useMantineTheme();
   const ownedTokens = useSelector(selectOwnedTokens);
   const otherOwnedTokens = ownedTokens.filter((it) => it !== token);
 
@@ -34,7 +26,7 @@ export function SingleTokenPage() {
             <SingleToken token={token || ""} />
 
             {otherOwnedTokens.length && (
-              <Card>
+              <Card shadow="sm">
                 <Text weight={600} mb={12}>
                   Thug Gang:
                 </Text>
@@ -43,7 +35,7 @@ export function SingleTokenPage() {
                     return (
                       <Grid.Col sm={4} xs={3} md={4} key={it}>
                         <Link to={"/thug/" + it}>
-                          <SingleToken token={it} isThumbnail={true} />
+                          <TokenThumbnail token={it} />
                         </Link>
                       </Grid.Col>
                     );
@@ -54,7 +46,7 @@ export function SingleTokenPage() {
           </Group>
         </Grid.Col>
         <Grid.Col sm={6} md={8} key={token}>
-          <AvailableUpdates token={token || ""} />
+          <AvailableUpdatesWrapper token={token || ""} />
         </Grid.Col>
       </Grid>
     </>

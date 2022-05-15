@@ -7,6 +7,8 @@ export interface ITraitUpdate {
   isCustomTrait?: boolean; // = no original trait
   butterPrize?: number;
   solPrize?: number;
+  limit?: number;
+  count?: number;
 }
 
 export function mapToUpgradeTrait(update: ITraitUpdate): ITrait {

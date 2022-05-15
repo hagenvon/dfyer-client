@@ -6,6 +6,7 @@ export interface RarityState {
   weights: Weights;
   filters: Filters;
   edition: Editions;
+  showWeights: boolean;
 }
 
 const initialState: RarityState = {
@@ -28,6 +29,7 @@ const initialState: RarityState = {
   },
   filters: {},
   edition: "infamous",
+  showWeights: false,
 };
 
 export const rarityStateSlice = createSlice({
@@ -61,9 +63,18 @@ export const rarityStateSlice = createSlice({
     setEdition: (state, action: PayloadAction<Editions>) => {
       state.edition = action.payload;
     },
+    showWeights: (state, action: PayloadAction<boolean>) => {
+      state.showWeights = action.payload;
+    },
   },
 });
 
-export const { setWeight, setFilters, addFilter, removeFilter, setEdition } =
-  rarityStateSlice.actions;
+export const {
+  setWeight,
+  setFilters,
+  addFilter,
+  removeFilter,
+  setEdition,
+  showWeights,
+} = rarityStateSlice.actions;
 export default rarityStateSlice.reducer;

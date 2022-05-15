@@ -6,6 +6,7 @@ import {
   Group,
   useMantineTheme,
   createStyles,
+  SimpleGrid,
 } from "@mantine/core";
 import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
 import { PublicKey } from "@solana/web3.js";
@@ -14,26 +15,24 @@ import React from "react";
 import { birdLabels } from "../constants/constants";
 import { getRandomIntInclusive } from "../helper/getRandomInt";
 import { useNavigate } from "react-router-dom";
+import { TraitItem } from "./thug/TraitItem";
+import { SectionClaim } from "./thug/SectionClaim";
+import { useDispatch } from "react-redux";
+import { claimSingleReward } from "../redux/claimState";
 
 interface TokenCardProps {
   token: string;
 }
 
 const useStyles = createStyles((theme) => ({
-  attributes: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: `${theme.spacing.sm}px ${theme.spacing.lg}px`,
-    borderTop: `1px solid ${
+  header: {
+    borderBottom: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
     }`,
-    flexWrap: "wrap",
-  },
-  attribute: {
-    minWidth: "50%",
-    maxWidth: "50%",
-    marginBottom: "6px",
-    flexWrap: "wrap",
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    paddingBottom: theme.spacing.xs,
+    paddingTop: theme.spacing.xs,
   },
 }));
 
@@ -42,17 +41,12 @@ export function TokenCard({ token }: TokenCardProps) {
   const metaData = useMetaplexMetadata(new PublicKey(token));
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const { classes } = useStyles();
 
-  const attributes = metaData?.attributes.map((updates, index) => (
-    <div key={index} className={classes.attribute}>
-      <Text size="xs" color="dimmed">
-        {updates.trait_type}
-      </Text>
-      <Text weight={500} size="sm" pr={6}>
-        {updates.value}
-      </Text>
-    </div>
+  const attributes = metaData?.attributes.map((trait, index) => (
+    <TraitItem key={index} trait={trait} />
   ));
 
   const handleCustomize = () => {
@@ -65,26 +59,26 @@ export function TokenCard({ token }: TokenCardProps) {
         <img src={metaData?.image} alt="" width={"100%"} />
       </Card.Section>
 
-      <Group
-        position="apart"
-        style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
-      >
-        <Text weight={500}>{metaData?.name}</Text>
-        <Badge color="pink" variant="light">
-          {birdLabels[getRandomIntInclusive(0, birdLabels.length - 1)]}
-        </Badge>
-      </Group>
+      <Card.Section className={classes.header}>
+        <Group position="apart">
+          <Text weight={500}>{metaData?.name}</Text>
+          <Badge color="pink" variant="light">
+            {birdLabels[getRandomIntInclusive(0, birdLabels.length - 1)]}
+          </Badge>
+        </Group>
+      </Card.Section>
 
-      <Card.Section className={classes.attributes}>{attributes}</Card.Section>
+      <Card.Section mb={15}>
+        <SectionClaim token={token} />
+      </Card.Section>
 
-      <Button
-        variant="light"
-        fullWidth
-        style={{ marginTop: 10 }}
-        onClick={handleCustomize}
-      >
+      <Button fullWidth style={{ marginTop: 10 }} onClick={handleCustomize}>
         Customize Now!
       </Button>
+
+      <SimpleGrid cols={2} spacing={"xs"} mt={"sm"} mb={"md"}>
+        {attributes}
+      </SimpleGrid>
     </Card>
   );
 }

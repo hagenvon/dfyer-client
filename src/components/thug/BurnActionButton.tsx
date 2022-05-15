@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import {
   endUpdating,
   setActiveTransactionState,
+  startActiveTransaction,
   startUpdating,
 } from "../../redux/uiState";
 import { useMintBalance } from "../../hooks/useMintBalance";
@@ -53,9 +54,16 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
         token: token,
         signature: signature,
       });
+
       dispatch(
-        setActiveTransactionState({ state: transactionCreated, signature })
+        startActiveTransaction({
+          state: transactionCreated,
+          signature,
+          token,
+          showSuccess: false,
+        })
       );
+
       dispatch(startUpdating());
     } catch (error) {
       console.log("TX failed", error);

@@ -6,10 +6,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { fetchMintBalance, fetchSolBalance } from "../redux/uiState";
 import { butterPubKey } from "../constants/constants";
+import { fetchClaims } from "../redux/claimState";
+import { createStyles, Group } from "@mantine/core";
+
+const useStyle = createStyles((theme) => {
+  return {
+    box: {
+      height: "36px",
+      padding: "0px 12px",
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[2],
+      display: "flex",
+      alignItems: "center",
+      fontSize: "14px",
+    },
+  };
+});
 
 export const Balance: FC = () => {
   const { connected, publicKey } = useWallet();
-
+  const { classes } = useStyle();
   const dispatch = useDispatch();
   const balance = useSelector((state: RootState) => state.ui.solBalance);
   const butterBalance = useSelector(
@@ -25,6 +43,12 @@ export const Balance: FC = () => {
         // @ts-ignore
         fetchMintBalance({ mint: butterPubKey, fromPublicKey: publicKey })
       );
+
+      // TODO: Move to dedicated Component
+      dispatch(
+        // @ts-ignore
+        fetchClaims(publicKey)
+      );
     }
   }, [publicKey]);
 
@@ -33,8 +57,9 @@ export const Balance: FC = () => {
   }
 
   return (
-    <span>
-      {balance.toFixed(4)} SOL | {butterBalance} BUTTER
-    </span>
+    <Group>
+      <div className={classes.box}>{balance.toFixed(4)} SOL</div>
+      <div className={classes.box}>{butterBalance} BUTTER</div>
+    </Group>
   );
 };

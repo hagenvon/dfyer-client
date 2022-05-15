@@ -5,6 +5,8 @@ import { getUpdateState } from "../../api/updateTrait";
 import {
   ActiveUpdateDetails,
   endUpdating,
+  fetchMintBalance,
+  fetchSolBalance,
   markActiveTransactionAsSuccess,
   setActiveTransactionState,
 } from "../../redux/uiState";
@@ -12,8 +14,12 @@ import { ProgressStepper } from "./Stepper";
 import { IUpdateState, nonActiveUpdateStates } from "../../models/IUpdateState";
 import { fetchMetadata } from "../../redux/metadataState";
 import { Group, Text, Button, Alert } from "@mantine/core";
+import { butterPubKey } from "../../constants/constants";
+import { PublicKey } from "@solana/web3.js";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export function UpdateProgress() {
+  const { publicKey } = useWallet();
   const dispatch = useDispatch();
   const activeUpdates: ActiveUpdateDetails[] = useSelector(
     selectAllActiveUpdates
@@ -23,7 +29,7 @@ export function UpdateProgress() {
   useEffect(() => {
     intervals.forEach((interval) => clearInterval(interval));
 
-    if (activeUpdates.length) {
+    if (activeUpdates.length && publicKey) {
       activeUpdates
         .filter((activeUpdate) => {
           return !nonActiveUpdateStates.includes(activeUpdate.state);
@@ -42,6 +48,16 @@ export function UpdateProgress() {
               await dispatch(fetchMetadata(activeUpdate.token));
               await dispatch(
                 markActiveTransactionAsSuccess(activeUpdate.signature)
+              );
+
+              // @ts-ignore
+              dispatch(fetchSolBalance(publicKey));
+              dispatch(
+                // @ts-ignore
+                fetchMintBalance({
+                  mint: butterPubKey,
+                  fromPublicKey: new PublicKey(publicKey),
+                })
               );
             }
           }, 1000);

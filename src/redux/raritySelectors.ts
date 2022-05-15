@@ -19,6 +19,11 @@ export const selectEdition = createSelector(
   (state) => state.edition
 );
 
+export const selectShowWeights = createSelector(
+  [selectRarityState],
+  (state) => state.showWeights
+);
+
 export const selectAllActiveFilters = createSelector(
   [selectAllFilters],
   (filters) => {
