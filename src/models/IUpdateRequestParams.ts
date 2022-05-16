@@ -5,4 +5,5 @@ export interface IUpdateRequestParams {
   fromKey: string;
   update: ITraitUpdate;
   token: string;
+  type: "CUSTOMIZE" | "BURN";
 }

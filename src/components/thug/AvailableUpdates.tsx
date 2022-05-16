@@ -3,6 +3,7 @@ import React from "react";
 import { ITraitUpdate } from "../../models/ITraitUpdate";
 import { UpdateItem } from "./UpdateItem";
 import { stringifyFilterTrait } from "../../helper/filterTraitString";
+import { SectionHeader } from "./SectionHeader";
 
 interface AvailableUpdatesProps {
   canUpdate: boolean;
@@ -42,7 +43,10 @@ export function AvailableUpdates({
 
   return (
     <Card shadow="sm" p="md" component={"div"} mb={"md"}>
-      <Text weight={500}>{label}</Text>
+      <Card.Section>
+        <SectionHeader title={label} />
+      </Card.Section>
+
       {/*<LoadingOverlay visible={isUpdating} />*/}
 
       <Card.Section className={classes.attributes}>

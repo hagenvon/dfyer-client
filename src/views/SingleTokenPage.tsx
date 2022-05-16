@@ -22,7 +22,7 @@ export function SingleTokenPage() {
           </Box>
         </Grid.Col>
         <Grid.Col sm={6} md={4}>
-          <Group direction={"column"} spacing={25}>
+          <Group direction={"column"} spacing={20}>
             <SingleToken token={token || ""} />
 
             {otherOwnedTokens.length && (

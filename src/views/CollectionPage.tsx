@@ -217,22 +217,22 @@ export function CollectionPage() {
                 ),
                 value: "infamous",
               },
-              // {
-              //   label: (
-              //     <Center>
-              //       <Flame size={16} />
-              //       <Box ml={10}>Burnt Thugs</Box>
-              //     </Center>
-              //   ),
-              //   value: "burnt",
-              // },
+              {
+                label: (
+                  <Center>
+                    <Flame size={16} />
+                    <Box ml={10}>Burnt Thugs</Box>
+                  </Center>
+                ),
+                value: "burnt",
+              },
             ]}
             onChange={(val) => dispatch(setEdition(val as Editions))}
           />
         </Group>
         <Group>
           <Alert py={5} px={15} color={"gray"}>
-            <Text size={"sm"}>Showing: {filteredItems.length} thugs</Text>
+            <Text size={"sm"}>Showing: {filteredItems.length} Thugs</Text>
           </Alert>
           <Button
             size="xs"

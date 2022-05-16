@@ -53,6 +53,7 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
         update: update,
         token: token,
         signature: signature,
+        type: "BURN",
       });
 
       dispatch(

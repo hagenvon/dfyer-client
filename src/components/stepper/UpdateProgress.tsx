@@ -79,14 +79,16 @@ export function UpdateProgress() {
 
             {activeUpdate.showSuccess && (
               <Alert color={"green"} variant={"light"} p={10}>
-                <Text mb={10}>Booom! Thug successfully updated!</Text>
+                <Text mb={10} size={"sm"}>
+                  Booom! Thug successfully updated!
+                </Text>
                 <Button
                   variant={"outline"}
                   color={"green"}
                   onClick={() => dispatch(endUpdating())}
                   fullWidth={true}
                 >
-                  OK, Thanks!
+                  Cool, Thanks!
                 </Button>
               </Alert>
             )}

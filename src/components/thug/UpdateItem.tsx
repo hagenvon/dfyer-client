@@ -1,8 +1,10 @@
-import { createStyles, Badge, Group } from "@mantine/core";
+import { createStyles, Badge, Group, Text } from "@mantine/core";
 import React from "react";
 import { UpdateActionButton } from "./UpdateActionButton";
 import { ITraitUpdate } from "../../models/ITraitUpdate";
 import { TraitItem } from "./TraitItem";
+import { useSelector } from "react-redux";
+import { selectButterBalance, selectSolBalance } from "../../redux/uiSelectors";
 
 interface UpdateItemProps {
   update: ITraitUpdate;
@@ -27,6 +29,11 @@ const useStyles = createStyles((theme) => ({
 
 export function UpdateItem({ canUpdate, update, token }: UpdateItemProps) {
   const { classes } = useStyles();
+  const butterBalance = useSelector(selectButterBalance);
+  const solBalance = useSelector(selectSolBalance);
+
+  const isAffordable =
+    update.solPrize <= solBalance && update.butterPrize <= butterBalance;
 
   const limitDisplay = update.limit ? `${update.count}/${update.limit}` : "";
 
@@ -34,19 +41,26 @@ export function UpdateItem({ canUpdate, update, token }: UpdateItemProps) {
     <div className={classes.wrapper}>
       <Group spacing={12}>
         <TraitItem trait={update} />
-        <div>
-          {update.isCustomTrait && <Badge color="primary">Upgrade</Badge>}
-          {limitDisplay && <Badge color="green">Limited: {limitDisplay}</Badge>}
-        </div>
+        <Group spacing={4}>
+          {update.isCustomTrait ? (
+            <Badge color="primary">Upgrade</Badge>
+          ) : (
+            <Badge color="gray">Classic</Badge>
+          )}
+          {limitDisplay && <Badge color="red">Limited: {limitDisplay}</Badge>}
+        </Group>
       </Group>
       <Group spacing={4}>
-        <Badge color="green" variant="light">
-          {update.solPrize} SOL
+        <Badge color={isAffordable ? "green" : "gray"} variant="light">
+          {update.solPrize} SOL, {update.butterPrize} BUTTER
         </Badge>
-        <Badge color="blue" variant="light">
-          {update.butterPrize} BUTTER
-        </Badge>
-        {canUpdate && <UpdateActionButton token={token} update={update} />}
+        {canUpdate && (
+          <UpdateActionButton
+            token={token}
+            update={update}
+            disabled={!isAffordable}
+          />
+        )}
       </Group>
     </div>
   );

@@ -66,12 +66,12 @@ export function LandingPage() {
                 <List.Item>
                   <b>Upgrade</b> – Upgrade your thug with new attributes.
                 </List.Item>
-                {/*<List.Item>*/}
-                {/*  <b>Burn</b> – Transform your thug into a "Burnt Infamous*/}
-                {/*  Thug".*/}
-                {/*</List.Item>*/}
                 <List.Item>
-                  <b>$BUTTER</b> – Get rewarded with $Butter for holding.
+                  <b>Burn</b> – Transform your thug into a "Burnt Infamous
+                  Thug".
+                </List.Item>
+                <List.Item>
+                  <b>$BUTTER</b> – Get $Butter for holding. Our utility token.
                 </List.Item>
               </List>
 

@@ -4,9 +4,9 @@ export interface ITraitUpdate {
   trait_type: string;
   value: string;
   rarity?: number;
-  isCustomTrait?: boolean; // = no original trait
-  butterPrize?: number;
-  solPrize?: number;
+  isCustomTrait: boolean; // = no original trait
+  butterPrize: number;
+  solPrize: number;
   limit?: number;
   count?: number;
 }

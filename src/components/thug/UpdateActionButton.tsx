@@ -4,31 +4,24 @@ import { createTransaction } from "../../helper/createTransaction";
 import { getUpdateState, updateTrait } from "../../api/updateTrait";
 import { projectPubKey } from "../../constants/constants";
 import { ITraitUpdate } from "../../models/ITraitUpdate";
-import { Button, Modal } from "@mantine/core";
-import React, { useState } from "react";
+import { Button } from "@mantine/core";
+import React from "react";
 import { useModals } from "@mantine/modals";
-import { useSolBalance } from "../../hooks/useSolBalance";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  endUpdating,
-  setActiveTransactionState,
-  startActiveTransaction,
-  startUpdating,
-} from "../../redux/uiState";
-import { useMintBalance } from "../../hooks/useMintBalance";
+import { useDispatch } from "react-redux";
+import { startActiveTransaction, startUpdating } from "../../redux/uiState";
 import { UpdateConfirmDialog } from "./UpdateConfirmDialog";
-import { IUpdateState } from "../../models/IUpdateState";
-import { sleep } from "../../helper/sleep";
-import { ProgressStepper } from "../stepper/Stepper";
-import { showNotification } from "@mantine/notifications";
-import { RootState } from "../../redux/store";
 
 interface UpdateActionButtonProps {
   token: string;
   update: ITraitUpdate;
+  disabled: boolean;
 }
 
-export function UpdateActionButton({ update, token }: UpdateActionButtonProps) {
+export function UpdateActionButton({
+  update,
+  token,
+  disabled,
+}: UpdateActionButtonProps) {
   const { publicKey, sendTransaction } = useWallet();
   const modals = useModals();
   const connection = getConnection();
@@ -55,6 +48,7 @@ export function UpdateActionButton({ update, token }: UpdateActionButtonProps) {
         update: update,
         token: token,
         signature: signature,
+        type: "CUSTOMIZE",
       });
 
       dispatch(
@@ -66,10 +60,6 @@ export function UpdateActionButton({ update, token }: UpdateActionButtonProps) {
         })
       );
       dispatch(startUpdating());
-
-      //
-      // fetchBalance();
-      // fetchButterBalance();
     } catch (error) {
       console.log("TX failed", error);
     }
@@ -85,7 +75,13 @@ export function UpdateActionButton({ update, token }: UpdateActionButtonProps) {
     });
 
   return (
-    <Button size={"xs"} variant="outline" onClick={openConfirmModal} ml={8}>
+    <Button
+      size={"xs"}
+      variant="outline"
+      onClick={openConfirmModal}
+      ml={8}
+      disabled={disabled}
+    >
       Update
     </Button>
   );

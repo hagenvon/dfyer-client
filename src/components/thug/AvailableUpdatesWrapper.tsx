@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { selectOwnedTokens } from "../../redux/metadataSelectors";
 import { AvailableUpdates } from "./AvailableUpdates";
+const sortBy = require("lodash.sortby");
 
 interface AvailableUpdatesWrapperProps {
   token: string;
@@ -19,6 +20,11 @@ export function AvailableUpdatesWrapper({
 
   const canUpdate = true; // isTokenOwned && connected;
 
+  const availableUpdatesSorted = sortBy(availableUpdates, [
+    "trait_type",
+    "value",
+  ]);
+
   const upgrades = availableUpdates.filter((it) => it.isCustomTrait);
   const customizations = availableUpdates.filter((it) => !it.isCustomTrait);
 
@@ -26,7 +32,7 @@ export function AvailableUpdatesWrapper({
     <>
       {upgrades.length > 0 && (
         <AvailableUpdates
-          label={"Available Upgrades"}
+          label={"Available Updates"}
           token={token}
           availableTraits={upgrades}
           canUpdate={canUpdate}
