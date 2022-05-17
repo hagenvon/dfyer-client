@@ -11,11 +11,14 @@ import {
   Button,
   Box,
   Stack,
+  MediaQuery,
 } from "@mantine/core";
-import { useBooleanToggle } from "@mantine/hooks";
+import { useBooleanToggle, useMediaQuery } from "@mantine/hooks";
 import { BrandTwitter, BrandDiscord } from "tabler-icons-react";
 import { InfamousLogo } from "../InfamousLogo";
 import { useLocation, useNavigate, useRoutes } from "react-router-dom";
+import { InfamousLogoShorten } from "../InfamousLogoShorten";
+import { ConnectButton } from "../connect-button/ConnectButton";
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -38,6 +41,7 @@ const useStyles = createStyles((theme) => ({
 
   social: {
     width: 320,
+    justifyContent: "flex-end",
 
     [theme.fn.smallerThan("sm")]: {
       width: "auto",
@@ -100,6 +104,7 @@ export function HeaderMiddle({ links }: HeaderMiddleProps) {
   const [active, setActive] = useState(links[0].link);
   const { classes, cx, theme } = useStyles();
   const navigate = useNavigate();
+  const breakpointMatch = useMediaQuery("(min-width: 900px)");
 
   const isLandingPage = location.pathname === "/";
 
@@ -136,31 +141,22 @@ export function HeaderMiddle({ links }: HeaderMiddleProps) {
           <Group>
             {!isLandingPage && (
               <Box onClick={() => navigate("/")}>
-                <InfamousLogo
-                  fill={theme.colorScheme === "light" ? "#333" : "#fff"}
-                  height={32}
-                />
+                {breakpointMatch ? (
+                  <InfamousLogo
+                    fill={theme.colorScheme === "light" ? "#333" : "#fff"}
+                    height={36}
+                  />
+                ) : (
+                  <InfamousLogoShorten
+                    fill={theme.colorScheme === "light" ? "#333" : "#fff"}
+                    height={30}
+                  />
+                )}
               </Box>
             )}
           </Group>
-
-          <Group spacing={0} className={classes.social} position="right" noWrap>
-            <ActionIcon
-              size="lg"
-              onClick={() =>
-                window.location.assign("https://twitter.com/infamousBirdz")
-              }
-            >
-              <BrandTwitter size={24} strokeWidth={1.5} />
-            </ActionIcon>
-            <ActionIcon
-              size="lg"
-              onClick={() =>
-                window.location.assign("https://discord.gg/Kv4PTfq3ep")
-              }
-            >
-              <BrandDiscord size={24} strokeWidth={1.5} />
-            </ActionIcon>
+          <Group className={classes.social}>
+            <ConnectButton />
           </Group>
         </Container>
       </Header>

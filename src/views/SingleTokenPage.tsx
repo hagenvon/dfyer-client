@@ -1,4 +1,4 @@
-import { Box, Card, Grid, Group, Text } from "@mantine/core";
+import { Box, Card, Grid, Group, SimpleGrid, Text } from "@mantine/core";
 import { SingleToken } from "../components/thug/SingleToken";
 import { Link, useParams } from "react-router-dom";
 import React from "react";
@@ -7,19 +7,24 @@ import { useSelector } from "react-redux";
 import { selectOwnedTokens } from "../redux/metadataSelectors";
 import { AvailableUpdatesWrapper } from "../components/thug/AvailableUpdatesWrapper";
 import { TokenThumbnail } from "../components/thug/TokenThumbnail";
+import { Headline } from "../components/headlines/Headline";
+import { selectCompletedActiveUpdateSignatures } from "../redux/uiSelectors";
 
 export function SingleTokenPage() {
   const { token } = useParams();
   const ownedTokens = useSelector(selectOwnedTokens);
+  // temp: small hack to ensure reload after an update is complete,
+  // maybe available updates to the store at a later stage
+  const signatureOfCompletedUpdated = useSelector(
+    selectCompletedActiveUpdateSignatures
+  );
   const otherOwnedTokens = ownedTokens.filter((it) => it !== token);
 
   return (
     <>
       <Grid>
         <Grid.Col xs={12}>
-          <Box mr={-15} mb={12} mt={10}>
-            <ThugDetails fill={"#ccc"} height={28} />
-          </Box>
+          <Headline title={"details"} />
         </Grid.Col>
         <Grid.Col sm={6} md={4}>
           <Group direction={"column"} spacing={20}>
@@ -30,22 +35,24 @@ export function SingleTokenPage() {
                 <Text weight={600} mb={12}>
                   Thug Gang:
                 </Text>
-                <Grid>
+                <SimpleGrid cols={3}>
                   {otherOwnedTokens.slice(0, 18).map((it) => {
                     return (
-                      <Grid.Col sm={4} xs={3} md={4} key={it}>
-                        <Link to={"/thug/" + it}>
-                          <TokenThumbnail token={it} />
-                        </Link>
-                      </Grid.Col>
+                      <Link to={"/thug/" + it} key={it}>
+                        <TokenThumbnail token={it} />
+                      </Link>
                     );
                   })}
-                </Grid>
+                </SimpleGrid>
               </Card>
             )}
           </Group>
         </Grid.Col>
-        <Grid.Col sm={6} md={8} key={token}>
+        <Grid.Col
+          sm={6}
+          md={8}
+          key={token + signatureOfCompletedUpdated.join(",")}
+        >
           <AvailableUpdatesWrapper token={token || ""} />
         </Grid.Col>
       </Grid>

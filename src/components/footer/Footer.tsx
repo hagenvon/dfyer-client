@@ -9,6 +9,7 @@ import {
 import { BrandTwitter, BrandDiscord } from "tabler-icons-react";
 import { InfamousLogo } from "../InfamousLogo";
 import { ThemeToggle } from "../ThemeToggler";
+import { InfamousLogoShorten } from "../InfamousLogoShorten";
 const version = require("../../../package.json").version;
 
 const useStyles = createStyles((theme) => ({
@@ -38,6 +39,12 @@ const useStyles = createStyles((theme) => ({
       marginBottom: theme.spacing.lg,
     },
   },
+  innerGroup: {
+    alignItems: "flex-start",
+    [theme.fn.smallerThan("xs")]: {
+      alignItems: "center",
+    },
+  },
 }));
 
 export function FooterDefault() {
@@ -48,10 +55,10 @@ export function FooterDefault() {
   return (
     <div className={classes.footer}>
       <Container className={classes.inner}>
-        <Group direction={"column"} spacing={0}>
+        <Group direction={"column"} spacing={0} className={classes.innerGroup}>
           <InfamousLogo height={24} fill={isLightTheme ? "#333" : "#fff"} />
           <Text mt={5} size={"xs"}>
-            A Solana OG Derivative by hhkonz @ 2022 | DFyer {version}
+            2022 by @hhkonz1 | DFyer {version}
           </Text>
         </Group>
 

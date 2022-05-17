@@ -24,6 +24,7 @@ export const BaseLayout: FC<{ children: ReactNode }> = ({ children }) => {
         links={[
           { link: "/collection", label: "Collection" },
           { link: "/gang", label: "Gang" },
+          { link: "/faq", label: "FAQ" },
         ]}
       />
       <div>

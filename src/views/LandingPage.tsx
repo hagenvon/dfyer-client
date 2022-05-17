@@ -1,24 +1,23 @@
 import React from "react";
 import {
+  Alert,
   Box,
   Button,
-  Card,
   Center,
-  Container,
   createStyles,
-  Grid,
   Group,
-  Image,
-  List,
   SimpleGrid,
-  ThemeIcon,
-  useMantineTheme,
 } from "@mantine/core";
 import { InfamousBirdzLogo } from "../components/InfamousBirdzLogo";
 import { useNavigate } from "react-router-dom";
 // @ts-ignore
-import thugImg from "../images/deko-thug.png";
-import { Check } from "tabler-icons-react";
+import thugImg from "../images/823.png";
+// @ts-ignore
+import burnImg from "../images/burn.png";
+// @ts-ignore
+import customize from "../images/customize.jpg";
+
+import { LandingCard } from "../components/card-components/LandingCard";
 
 const useStyle = createStyles((theme) => ({
   card: {
@@ -29,7 +28,7 @@ const useStyle = createStyles((theme) => ({
 }));
 
 export function LandingPage() {
-  const { classes, theme } = useStyle();
+  const { theme } = useStyle();
   const navigate = useNavigate();
   return (
     <Box>
@@ -39,62 +38,30 @@ export function LandingPage() {
           height={132}
         />
       </Center>
-      <Card shadow={"md"}>
-        <Card.Section>
-          <Group>
-            <Image src={thugImg} width={"100%"} />
-            <Group
-              direction={"column"}
-              position={"left"}
-              className={classes.card}
-            >
-              <List
-                mt={30}
-                mb={30}
-                spacing="sm"
-                size="sm"
-                icon={
-                  <ThemeIcon size={24} radius="xl" color={"green"}>
-                    <Check size={12} strokeWidth={3} />
-                  </ThemeIcon>
-                }
-              >
-                <List.Item>
-                  <b>Customize</b> – Customize your thug with classic
-                  attributes.
-                </List.Item>
-                <List.Item>
-                  <b>Upgrade</b> – Upgrade your thug with new attributes.
-                </List.Item>
-                <List.Item>
-                  <b>Burn</b> – Transform your thug into a "Burnt Infamous
-                  Thug".
-                </List.Item>
-                <List.Item>
-                  <b>$BUTTER</b> – Get $Butter for holding. Our utility token.
-                </List.Item>
-              </List>
+      <SimpleGrid cols={3}>
+        <LandingCard imageSrc={thugImg}>
+          <strong>$BUTTER</strong> – Get $Butter for holding. Our utility token.
+        </LandingCard>
+        <LandingCard imageSrc={customize}>
+          <strong>Customize</strong> – Customize your thug with classic and new
+          attributes.
+        </LandingCard>
+        <LandingCard imageSrc={burnImg}>
+          <strong>Burn</strong> – Transform your thug into a "Burnt Infamous
+          Thug".
+        </LandingCard>
+      </SimpleGrid>
 
-              <Group>
-                <Button
-                  size={"md"}
-                  variant={"outline"}
-                  onClick={() => navigate("/collection")}
-                >
-                  The Collection
-                </Button>
-                <Button
-                  size={"md"}
-                  variant={"outline"}
-                  onClick={() => navigate("/gang")}
-                >
-                  My Thugs
-                </Button>
-              </Group>
-            </Group>
-          </Group>
-        </Card.Section>
-      </Card>
+      <Center mt={30} mb={30}>
+        <Group>
+          <Button size={"lg"} onClick={() => navigate("/collection")}>
+            The Collection
+          </Button>
+          <Button size={"lg"} onClick={() => navigate("/gang")}>
+            My Gang
+          </Button>
+        </Group>
+      </Center>
     </Box>
   );
 }

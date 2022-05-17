@@ -12,3 +12,20 @@ export const selectSolBalance = createSelector(
   [selectUiState],
   (ui) => ui.solBalance
 );
+
+export const selectActiveUpdates = createSelector(
+  [selectUiState],
+  (ui) => ui.activeUpdates
+);
+
+export const selectCompletedActiveUpdateSignatures = createSelector(
+  [selectActiveUpdates],
+  (activeUpdates) =>
+    Object.entries(activeUpdates)
+      .filter(([signature, update]) => {
+        return update.showSuccess === true;
+      })
+      .map(([signature]) => {
+        return signature;
+      })
+);

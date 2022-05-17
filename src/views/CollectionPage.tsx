@@ -44,6 +44,7 @@ import { Editions, Weights } from "../models/Rarity.models";
 import { fetchListings } from "../redux/listingsState";
 import { Crown, Flame } from "tabler-icons-react";
 import { stringifyFilterTrait } from "../helper/filterTraitString";
+import { Headline } from "../components/headlines/Headline";
 
 export function CollectionPage() {
   const [activePage, setPage] = useState(1);
@@ -198,9 +199,7 @@ export function CollectionPage() {
 
       <Grid>
         <Grid.Col>
-          <Box mb={12} mt={10} style={{ alignItems: "flex-start" }}>
-            <ThugGang fill={"#ccc"} height={28} />
-          </Box>
+          <Headline title={"collection"} />
         </Grid.Col>
       </Grid>
 
