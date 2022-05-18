@@ -13,7 +13,7 @@ const initialState: RarityState = {
   weights: {
     Type: 1,
     Model: 0,
-    "Gang Role": 0.1,
+    "Gang Role": 0.05,
     "Favorite Rapper": 0,
     Look: 0,
     Background: 1,

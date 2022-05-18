@@ -1,4 +1,4 @@
-import react from "react";
+import react, { useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { getConnection } from "../../helper/getConnection";
 import { createTransaction } from "../../helper/createTransaction";
@@ -9,7 +9,7 @@ import { Button, useMantineTheme } from "@mantine/core";
 import React from "react";
 import { useModals } from "@mantine/modals";
 import { useSolBalance } from "../../hooks/useSolBalance";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   endUpdating,
   setActiveTransactionState,
@@ -19,6 +19,11 @@ import {
 import { useMintBalance } from "../../hooks/useMintBalance";
 import { UpdateConfirmDialog } from "./UpdateConfirmDialog";
 import { Flame } from "tabler-icons-react";
+import {
+  fetchBurnUpdate,
+  selectBurnUpdate,
+  selectIsEditionsInitialized,
+} from "../../redux/editionState";
 
 interface UpdateActionButtonProps {
   token: string;
@@ -32,8 +37,18 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
   const dispatch = useDispatch();
   const theme = useMantineTheme();
 
+  const isEditionsInitialized = useSelector(selectIsEditionsInitialized);
+  const burnUpdate = useSelector(selectBurnUpdate);
+
+  useEffect(() => {
+    if (!burnUpdate || !isEditionsInitialized) {
+      // @ts-ignore
+      dispatch(fetchBurnUpdate());
+    }
+  }, []);
+
   const onConfirm = async () => {
-    if (!publicKey) {
+    if (!publicKey || !burnUpdate) {
       return;
     }
 
@@ -41,8 +56,8 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
       const tx = await createTransaction(
         publicKey,
         projectPubKey,
-        update.butterPrize || 30,
-        update.solPrize || 1
+        burnUpdate.butterPrize || 30,
+        burnUpdate.solPrize || 1
       );
       const signature = await sendTransaction(tx, connection);
 
@@ -50,7 +65,7 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
 
       const transactionCreated = await updateTrait({
         fromKey: publicKey.toBase58(),
-        update: update,
+        update: burnUpdate,
         token: token,
         signature: signature,
         type: "BURN",
@@ -74,7 +89,9 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
   const openConfirmModal = () =>
     modals.openConfirmModal({
       title: "Burn your Infamous Bird?",
-      children: <UpdateConfirmDialog update={update} token={token} />,
+      children: burnUpdate && (
+        <UpdateConfirmDialog update={burnUpdate} token={token} />
+      ),
       labels: { confirm: "LFG!!!", cancel: "Can't stand the heat." },
       onCancel: () => console.log("Cancel"),
       onConfirm: onConfirm,

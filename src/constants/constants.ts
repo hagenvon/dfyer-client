@@ -9,7 +9,7 @@ export const butterPubKey = new PublicKey(BUTTER_MINT);
 /**
  * Project Wallet
  */
-export const PROJECT_PUBKEY = "EDVfCGqYndt1QahVTrGJi8r1TtykBMLfMT7dHQofHSZA";
+export const PROJECT_PUBKEY = "7EsFjRHrL1VBEnkDaWvrF1PPwXT1nbm2SJ7nyPbxr5xh";
 export const projectPubKey = new PublicKey(PROJECT_PUBKEY);
 
 /**

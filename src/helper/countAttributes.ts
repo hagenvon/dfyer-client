@@ -2,13 +2,19 @@ import { IMetaData } from "../models/IMetaData";
 import { ITrait } from "../models/ITrait";
 import { CountedAttributes } from "../models/Rarity.models";
 
+const BLOCKED_TRAIT_TYPES = ["Edition"];
+
 export function getAllAttributes(allMetadata: IMetaData[]): ITrait[] {
   const result: ITrait[] = [];
   allMetadata.forEach((metadata) => {
     result.push(...metadata.attributes);
   });
-  return result;
+  return result.filter(filterAttributesToIgnore);
 }
+
+export const filterAttributesToIgnore = (trait: ITrait): boolean => {
+  return !BLOCKED_TRAIT_TYPES.includes(trait.trait_type);
+};
 
 const reducer = (
   acc: CountedAttributes,

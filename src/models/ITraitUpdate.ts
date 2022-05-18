@@ -9,6 +9,12 @@ export interface ITraitUpdate {
   solPrize: number;
   limit?: number;
   count?: number;
+  prize?: IUpdatePrize;
+}
+
+export interface IUpdatePrize {
+  sol: number;
+  [mint: string]: number;
 }
 
 export function mapToUpgradeTrait(update: ITraitUpdate): ITrait {

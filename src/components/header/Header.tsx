@@ -155,8 +155,23 @@ export function HeaderMiddle({ links }: HeaderMiddleProps) {
               </Box>
             )}
           </Group>
-          <Group className={classes.social}>
-            <ConnectButton />
+          <Group spacing={0} className={classes.social} position="right" noWrap>
+            <ActionIcon
+              size="lg"
+              onClick={() =>
+                window.location.assign("https://twitter.com/infamousBirdz")
+              }
+            >
+              <BrandTwitter size={24} strokeWidth={1.5} />
+            </ActionIcon>
+            <ActionIcon
+              size="lg"
+              onClick={() =>
+                window.location.assign("https://discord.gg/Kv4PTfq3ep")
+              }
+            >
+              <BrandDiscord size={24} strokeWidth={1.5} />
+            </ActionIcon>
           </Group>
         </Container>
       </Header>

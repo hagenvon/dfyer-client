@@ -18,6 +18,7 @@ import burnImg from "../images/burn.png";
 import customize from "../images/customize.jpg";
 
 import { LandingCard } from "../components/card-components/LandingCard";
+import { useMediaQuery } from "@mantine/hooks";
 
 const useStyle = createStyles((theme) => ({
   card: {
@@ -29,6 +30,9 @@ const useStyle = createStyles((theme) => ({
 
 export function LandingPage() {
   const { theme } = useStyle();
+  const breakpointMatch = useMediaQuery(
+    `(max-width: ${theme.breakpoints.sm}px)`
+  );
   const navigate = useNavigate();
   return (
     <Box>
@@ -38,7 +42,7 @@ export function LandingPage() {
           height={132}
         />
       </Center>
-      <SimpleGrid cols={3}>
+      <SimpleGrid cols={breakpointMatch ? 1 : 3}>
         <LandingCard imageSrc={thugImg}>
           <strong>$BUTTER</strong> – Get $Butter for holding. Our utility token.
         </LandingCard>

@@ -8,23 +8,7 @@ export const getRarityScore = (
   total: number,
   weights: Weights
 ): number => {
-  const allTraitTypes = Object.keys(counted);
-
-  const sanitizedAttributesList: ITrait[] = [];
-
-  allTraitTypes.forEach((traitType) => {
-    const foundTrait = infData.metadata.attributes.find(
-      (it) => it.trait_type === traitType
-    );
-    if (foundTrait) {
-      sanitizedAttributesList.push(foundTrait);
-    } else {
-      // Aliens don't have a neck
-      if (traitType !== "Neck") {
-        sanitizedAttributesList.push({ trait_type: traitType, value: "None" });
-      }
-    }
-  });
+  const sanitizedAttributesList = getSanitizedAttributeList(counted, infData);
 
   const scores = sanitizedAttributesList.map(({ trait_type, value }) => {
     const score = 1 / (counted[trait_type][value] / total);
@@ -39,3 +23,29 @@ export const getRarityScore = (
     }, 0) / sanitizedAttributesList.length
   );
 };
+
+function getSanitizedAttributeList(
+  countedAttrs: CountedAttributes,
+  data: InfamousData
+): ITrait[] {
+  // remove blocked trait types
+  const allTraitTypes = Object.keys(countedAttrs);
+  const result: ITrait[] = [];
+
+  allTraitTypes.forEach((traitType) => {
+    const foundTrait = data.metadata.attributes.find(
+      (it) => it.trait_type === traitType
+    );
+    if (foundTrait) {
+      // if found everything is fine
+      result.push(foundTrait);
+    } else {
+      // if not found everything fill up with "None",
+      // Except: Aliens don't have a neck
+      if (traitType !== "Neck") {
+        result.push({ trait_type: traitType, value: "None" });
+      }
+    }
+  });
+  return result;
+}
