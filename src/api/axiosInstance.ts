@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const API_ROOT =
   process.env.NODE_ENV === "production"
-    ? "http://infamous.builders"
+    ? "https://infamous.builders"
     : "http://localhost:5000";
 
 export const axiosInstance = axios.create({

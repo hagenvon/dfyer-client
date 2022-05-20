@@ -41,8 +41,8 @@ export function ProgressStepper({ signature }: { signature: string }) {
         IUpdateState.FILES_UPLOADED,
         IUpdateState.METADATA_UPDATE_TX_CREATED,
       ].includes(state),
-      failed: false,
-      message: "Update Transaction failed",
+      failed: state === IUpdateState.METADATA_UPDATE_TX_FAILED,
+      message: "Update Transaction failed. Please contact us.",
     },
   ];
 

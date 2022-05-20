@@ -36,6 +36,7 @@ import { CollectionPage } from "./views/CollectionPage";
 import { NotificationsProvider } from "@mantine/notifications";
 import { LandingPage } from "./views/LandingPage";
 import { FaqPage } from "./views/FaqPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App: FC = () => {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -49,6 +50,7 @@ const App: FC = () => {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <ScrollToTop />
         <ColorSchemeProvider
           colorScheme={colorScheme}
           toggleColorScheme={toggleColorScheme}

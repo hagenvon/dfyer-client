@@ -24,6 +24,8 @@ import {
   selectBurnUpdate,
   selectIsEditionsInitialized,
 } from "../../redux/editionState";
+import { AppDispatch } from "../../redux/store";
+import { selectButterBalance, selectSolBalance } from "../../redux/uiSelectors";
 
 interface UpdateActionButtonProps {
   token: string;
@@ -34,15 +36,22 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
   const { publicKey, sendTransaction } = useWallet();
   const modals = useModals();
   const connection = getConnection();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const theme = useMantineTheme();
 
   const isEditionsInitialized = useSelector(selectIsEditionsInitialized);
   const burnUpdate = useSelector(selectBurnUpdate);
 
+  const butterBalance = useSelector(selectButterBalance);
+  const solBalance = useSelector(selectSolBalance);
+
+  const canAffordBurning =
+    burnUpdate &&
+    butterBalance >= burnUpdate.butterPrize &&
+    solBalance > burnUpdate.solPrize;
+
   useEffect(() => {
     if (!burnUpdate || !isEditionsInitialized) {
-      // @ts-ignore
       dispatch(fetchBurnUpdate());
     }
   }, []);
@@ -95,6 +104,9 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
       labels: { confirm: "LFG!!!", cancel: "Can't stand the heat." },
       onCancel: () => console.log("Cancel"),
       onConfirm: onConfirm,
+      confirmProps: {
+        disabled: !canAffordBurning,
+      },
     });
 
   return (

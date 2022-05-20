@@ -5,6 +5,7 @@ import rarityReducer from "./rarityState";
 import listingsReducer from "./listingsState";
 import claimReducer from "./claimState";
 import editionsReducer from "./editionState";
+import rewardsReducer from "./rewardState";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     listings: listingsReducer,
     claims: claimReducer,
     editions: editionsReducer,
+    rewards: rewardsReducer,
   },
 });
 

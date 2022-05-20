@@ -7,7 +7,7 @@ import {
   ColorSwatch,
   Badge,
 } from "@mantine/core";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   claimSingleReward,
@@ -28,6 +28,8 @@ interface SectionClaimProps {
 export function SectionClaim({ token }: SectionClaimProps) {
   const { publicKey } = useWallet();
 
+  const [isFetching, setIsFetching] = useState(false);
+
   const claim = useSelector((state: RootState) =>
     selectClaimById(state.claims, token)
   );
@@ -36,12 +38,17 @@ export function SectionClaim({ token }: SectionClaimProps) {
   const isClaimingAll = useSelector(selectIsClaimingAll);
 
   const dispatch = useDispatch();
-  // @ts-ignore
-  const handleStartEarning = () => dispatch(startClaiming(token));
 
-  const handleClaim = () =>
+  const handleStartEarning = () => {
+    setIsFetching(true);
+    // @ts-ignore
+    dispatch(startClaiming(token));
+  };
+
+  const handleClaim = () => {
     // @ts-ignore
     dispatch(claimSingleReward({ token, wallet: publicKey?.toBase58() }));
+  };
 
   return (
     <Box px={claim ? 0 : "md"} pt={claim ? 0 : "md"}>
@@ -73,7 +80,12 @@ export function SectionClaim({ token }: SectionClaimProps) {
           }
         </Alert>
       ) : (
-        <Button fullWidth={true} onClick={handleStartEarning} variant="light">
+        <Button
+          fullWidth={true}
+          onClick={handleStartEarning}
+          variant="light"
+          loading={isFetching}
+        >
           Make me some $Butter!
         </Button>
       )}

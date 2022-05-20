@@ -20,7 +20,7 @@ export function ImageLoader({
 
   return (
     <>
-      {!isLoaded && (
+      {(!isLoaded || !src) && (
         <div
           style={{
             width: width,

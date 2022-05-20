@@ -19,7 +19,7 @@ export function TokenThumbnail({ token }: TokenThumbnailProps) {
   const metadata = useMetaplexMetadata(new PublicKey(token));
   return (
     <Box style={{ cursor: "pointer" }}>
-      <ImageLoader src={metadata.image} width={"100%"} />
+      <ImageLoader src={metadata ? metadata.image : ""} width={"100%"} />
     </Box>
   );
 }

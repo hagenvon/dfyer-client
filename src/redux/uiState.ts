@@ -47,7 +47,6 @@ export const fetchSolBalance = createAsyncThunk<number, PublicKey>(
     const connection = getConnection();
     const result = await connection.getBalance(publicKey);
 
-    console.log("SOL:", result);
     return (result / LAMPORTS_PER_SOL) as number;
   }
 );

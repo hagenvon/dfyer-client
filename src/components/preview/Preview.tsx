@@ -25,8 +25,8 @@ export function Preview(props: {
     return (
       <div
         style={{
-          height: _size,
-          width: _size,
+          paddingBottom: "100%",
+          width: "100%",
           position: "relative",
           backgroundColor: "gray",
         }}
@@ -36,5 +36,5 @@ export function Preview(props: {
     );
   }
 
-  return <img src={source} alt="preview" />;
+  return <img src={source} alt="preview" width={"100%"} />;
 }

@@ -13,7 +13,7 @@ import {
 import { ProgressStepper } from "./Stepper";
 import { IUpdateState, nonActiveUpdateStates } from "../../models/IUpdateState";
 import { fetchMetadata } from "../../redux/metadataState";
-import { Group, Text, Button, Alert } from "@mantine/core";
+import { Text, Button, Alert } from "@mantine/core";
 import { butterPubKey } from "../../constants/constants";
 import { PublicKey } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -88,7 +88,7 @@ export function UpdateProgress() {
                   onClick={() => dispatch(endUpdating())}
                   fullWidth={true}
                 >
-                  Cool, Thanks!
+                  Awesome!
                 </Button>
               </Alert>
             )}

@@ -9,6 +9,7 @@ export function GlobalStyles() {
         },
 
         body: {
+          margin: 0,
           backgroundColor:
             theme.colorScheme === "dark"
               ? theme.colors.dark[7]

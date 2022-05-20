@@ -15,7 +15,6 @@ export function useMetaplexMetadata(token: PublicKey) {
   useEffect(() => {
     if (!metadataInStore) {
       const fetchMetadata = async () => {
-        console.log("fetch metaplex md");
         try {
           const { metadata } = await getMetadata(token.toString());
           setMetadata(metadata);

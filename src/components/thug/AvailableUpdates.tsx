@@ -14,7 +14,7 @@ interface AvailableUpdatesProps {
 }
 
 const useStyles = createStyles((theme) => ({
-  attributes: {
+  updateList: {
     padding: `${theme.spacing.sm}px ${theme.spacing.lg}px`,
     borderTop: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
@@ -49,7 +49,7 @@ export function AvailableUpdates({
 
       {/*<LoadingOverlay visible={isUpdating} />*/}
 
-      <Card.Section className={classes.attributes}>
+      <Card.Section className={classes.updateList}>
         {isFetching ? (
           <div style={{ height: 200, position: "relative" }}>
             <LoadingOverlay visible={true} />

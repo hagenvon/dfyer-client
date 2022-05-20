@@ -18,7 +18,7 @@ export function AvailableUpdatesWrapper({
   const ownedTokens = useSelector(selectOwnedTokens);
   const isTokenOwned = ownedTokens.includes(token);
 
-  const canUpdate = true; // isTokenOwned && connected;
+  const canUpdate = isTokenOwned && connected;
 
   const availableUpdatesSorted = sortBy(availableUpdates, [
     "trait_type",

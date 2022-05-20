@@ -21,6 +21,14 @@ export function SingleToken({ token }: SingleTokenProps) {
 
   const canBurn = isTokenOwned && !getIsBurnt(metadata);
 
+  if (!metadata) {
+    return (
+      <Card shadow="sm" style={{ width: "100%", padding: 20 }}>
+        Loading...
+      </Card>
+    );
+  }
+
   return (
     <Card shadow="sm" style={{ width: "100%", padding: 0 }}>
       <SectionImage src={metadata?.image} />
