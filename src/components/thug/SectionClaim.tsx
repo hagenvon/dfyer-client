@@ -1,12 +1,4 @@
-import {
-  Text,
-  Group,
-  Box,
-  Button,
-  Alert,
-  ColorSwatch,
-  Badge,
-} from "@mantine/core";
+import { Text, Group, Box, Button, Alert, ColorSwatch } from "@mantine/core";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,12 +6,13 @@ import {
   selectClaimById,
   startClaiming,
 } from "../../redux/claimState";
-import { RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
   selectIsClaimingAll,
   selectIsClaimingOne,
 } from "../../redux/claimSelectors";
+import formatDistance from "date-fns/formatDistance";
 
 interface SectionClaimProps {
   token: string;
@@ -37,16 +30,16 @@ export function SectionClaim({ token }: SectionClaimProps) {
   const isClaimingThis = useSelector(selectIsClaimingOne(token));
   const isClaimingAll = useSelector(selectIsClaimingAll);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleStartEarning = () => {
     setIsFetching(true);
-    // @ts-ignore
     dispatch(startClaiming(token));
   };
 
   const handleClaim = () => {
-    // @ts-ignore
+    if (!publicKey) return;
+
     dispatch(claimSingleReward({ token, wallet: publicKey?.toBase58() }));
   };
 
@@ -62,7 +55,10 @@ export function SectionClaim({ token }: SectionClaimProps) {
               </Text>
             </Group>
             <Text size={"xs"}>
-              available at {new Date(claim.claimableAt).toLocaleDateString()}
+              {getDistanceString(
+                new Date().getTime(),
+                new Date(claim.claimableAt).getTime()
+              )}
             </Text>
           </Group>
           {
@@ -91,4 +87,12 @@ export function SectionClaim({ token }: SectionClaimProps) {
       )}
     </Box>
   );
+}
+
+function getDistanceString(now: number, targetTime: number): string {
+  if (now > targetTime) {
+    return "";
+  }
+
+  return "available in " + formatDistance(new Date(now), new Date(targetTime));
 }

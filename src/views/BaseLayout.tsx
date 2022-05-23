@@ -23,7 +23,7 @@ export const BaseLayout: FC<{ children: ReactNode }> = ({ children }) => {
       <HeaderMiddle
         links={[
           { link: "/collection", label: "Collection" },
-          { link: "/gang", label: "Gang" },
+          { link: "/gang", label: "My Gang" },
           { link: "/faq", label: "FAQ" },
         ]}
       />

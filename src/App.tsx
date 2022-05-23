@@ -37,6 +37,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { LandingPage } from "./views/LandingPage";
 import { FaqPage } from "./views/FaqPage";
 import ScrollToTop from "./components/ScrollToTop";
+import { AttributesPage } from "./views/AttributesPage";
 
 const App: FC = () => {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -131,6 +132,7 @@ const Content: FC = () => {
         <Route path="/thug/:token" element={<SingleTokenPage />} />
         <Route path="/collection" element={<CollectionPage />} />
         <Route path="/faq" element={<FaqPage />} />
+        <Route path="/attributes" element={<AttributesPage />} />
       </Routes>
     </BaseLayout>
   );

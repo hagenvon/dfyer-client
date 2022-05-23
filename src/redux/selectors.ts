@@ -85,6 +85,15 @@ export const selectCountedAttributes = createSelector(
   }
 );
 
+export const selectCountedAttributesInTotal = createSelector(
+  [selectMetadataAsList],
+  (all) => {
+    const allAttributes = getAllAttributes(all);
+
+    return countAttributes(allAttributes);
+  }
+);
+
 export const selectInfamousDataWithScore = createSelector(
   [
     selectAllInfamousDataAsListByEdition,
