@@ -16,7 +16,16 @@ const selectMetadataState = (state: RootState) => state.metadata;
 export const selectAllInfamousDataAsList = createSelector(
   [selectMetadataState],
   (all) => {
-    return Object.values(all) as InfamousData[];
+    const result: InfamousData[] = [];
+
+    all.ids.forEach((id) => {
+      const entity = all.entities[id];
+      if (entity) {
+        result.push(entity);
+      }
+    });
+
+    return result;
   }
 );
 

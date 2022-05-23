@@ -9,7 +9,7 @@ import { getMetadata } from "../api/metadata.api";
 export function useMetaplexMetadata(token: PublicKey) {
   const [metadata, setMetadata] = useState<IMetaData>();
   const metadataInStore = useSelector((state: RootState) =>
-    getMetadataByToken(state, token.toString())
+    getMetadataByToken(state.metadata, token.toString())
   );
 
   useEffect(() => {

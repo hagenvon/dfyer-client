@@ -58,7 +58,7 @@ export function FooterDefault() {
         <Group direction={"column"} spacing={0} className={classes.innerGroup}>
           <InfamousLogo height={24} fill={isLightTheme ? "#333" : "#fff"} />
           <Text mt={8} size={"sm"}>
-            2022 by @hhkonz1 | DFyer {version}
+            2022 by @hhkonz1 | dfyer {version}
           </Text>
         </Group>
 

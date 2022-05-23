@@ -19,7 +19,7 @@ export function SingleToken({ token }: SingleTokenProps) {
   const ownedTokens = useSelector(selectOwnedTokens);
   const isTokenOwned = ownedTokens.includes(token);
 
-  const canBurn = isTokenOwned && !getIsBurnt(metadata);
+  const canBurn = isTokenOwned && metadata && !getIsBurnt(metadata);
 
   if (!metadata) {
     return (

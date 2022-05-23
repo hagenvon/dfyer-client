@@ -61,7 +61,7 @@ export function SingleTokenOverview({ data }: SingleTokenOverviewProps) {
   return (
     <Card shadow="sm" p="xs">
       <Card.Section onClick={handleClick} style={{ cursor: "pointer" }}>
-        <ImageLoader src={metadata?.image} width={"100%"} />
+        <ImageLoader src={metadata ? metadata.image : ""} width={"100%"} />
       </Card.Section>
 
       <Card.Section className={classes.section}>

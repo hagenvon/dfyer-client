@@ -26,14 +26,14 @@ export function ProgressStepper({ signature }: { signature: string }) {
     {
       label: "Create Files",
       loading: [IUpdateState.VALIDATED, IUpdateState.RENDERING].includes(state),
-      failed: false,
+      failed: state === IUpdateState.RENDERING_FAILED,
       message: "Rendering failed",
     },
     {
       label: "Upload Files",
       loading: state === IUpdateState.RENDERED,
-      failed: false,
-      message: "Rendering failed",
+      failed: state === IUpdateState.FILES_UPLOADED_FAILED,
+      message: "Upload failed",
     },
     {
       label: "Update Metadata (Solana)",

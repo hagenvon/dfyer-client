@@ -1,6 +1,7 @@
 import { RootState } from "./store";
 import { InfamousData } from "../models/InfamousMap";
 import { createSelector } from "@reduxjs/toolkit";
+import { infamousDataAdapter } from "./metadataState";
 
 export function selectOwnedTokens(state: RootState): string[] {
   return state.ui.ownedTokens;
@@ -10,17 +11,10 @@ const selectUiState = (state: RootState) => state.ui;
 const selectMetadataState = (state: RootState) => state.metadata;
 const selectToken = (state: RootState, token: string) => token;
 
-export const getMetadataByToken = createSelector(
-  [selectMetadataState, selectToken],
-  (state, token) => state[token]
-);
+export const getMetadataByToken = infamousDataAdapter.getSelectors().selectById;
 
-export const selectAllInfamousDataAsList = createSelector(
-  [selectMetadataState],
-  (all) => {
-    return Object.values(all) as InfamousData[];
-  }
-);
+export const selectAllInfamousDataAsList =
+  infamousDataAdapter.getSelectors().selectAll;
 
 export const selectMetadataAsList = createSelector(
   [selectAllInfamousDataAsList],
