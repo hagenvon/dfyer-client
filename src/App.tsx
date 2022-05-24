@@ -42,7 +42,7 @@ import { AttributesPage } from "./views/AttributesPage";
 const App: FC = () => {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "infamous-color-scheme",
-    defaultValue: "light",
+    defaultValue: "dark",
     getInitialValueInEffect: true,
   });
   const toggleColorScheme = (value?: ColorScheme) =>
