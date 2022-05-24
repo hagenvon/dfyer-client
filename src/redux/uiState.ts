@@ -97,7 +97,9 @@ export const uiStateSlice = createSlice({
       state.activeUpdates = { ...newActiveUpdates };
     },
     setOwnedTokens: (state, action: PayloadAction<string[]>) => {
-      state.ownedTokens = [...action.payload];
+      state.ownedTokens = action.payload.filter(
+        (v, i, a) => a.indexOf(v) === i
+      );
     },
     startActiveTransaction: (
       state,
@@ -135,7 +137,9 @@ export const uiStateSlice = createSlice({
     });
 
     builder.addCase(findOwnedTokens.fulfilled, (state, action) => {
-      state.ownedTokens = action.payload;
+      state.ownedTokens = action.payload.filter(
+        (v, i, a) => a.indexOf(v) === i
+      );
     });
   },
 });
