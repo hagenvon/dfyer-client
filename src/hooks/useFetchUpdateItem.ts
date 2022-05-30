@@ -7,13 +7,11 @@ import {
   fetchUpdateBySignature,
   selectUpdateEntity,
 } from "../redux/updateHistoryState";
+import { IUpdateEntity } from "../models/IUpdateEntity";
 
-export function useFetchUpdateItem(signature: string) {
+export function useFetchUpdateItem(updateItem?: IUpdateEntity) {
   const { publicKey } = useWallet();
   const dispatch = useDispatch<AppDispatch>();
-  const updateItem = useSelector((state: RootState) =>
-    selectUpdateEntity(state.updateHistory, signature)
-  );
   let interval: NodeJS.Timer;
 
   useEffect(() => {
@@ -22,7 +20,7 @@ export function useFetchUpdateItem(signature: string) {
     if (publicKey && updateItem) {
       if (!nonActiveUpdateStates.includes(updateItem.state)) {
         interval = setInterval(() => {
-          dispatch(fetchUpdateBySignature(signature));
+          dispatch(fetchUpdateBySignature(updateItem.signature));
         }, 1000);
       }
     }

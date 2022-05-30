@@ -29,7 +29,8 @@ export function UpdateProgress({ signature }: { signature: string }) {
   const activeUpdate = useSelector((state: RootState) =>
     selectUpdateEntity(state.updateHistory, signature)
   );
-  useFetchUpdateItem(signature);
+
+  useFetchUpdateItem(activeUpdate);
 
   if (!activeUpdate) {
     return null;

@@ -9,6 +9,7 @@ import { selectButterBalance, selectSolBalance } from "../../redux/uiSelectors";
 interface UpdateItemProps {
   update: ITraitUpdate;
   canUpdate: boolean;
+  isUpdateBlocked: boolean;
   token: string;
 }
 
@@ -27,7 +28,12 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function UpdateItem({ canUpdate, update, token }: UpdateItemProps) {
+export function UpdateItem({
+  canUpdate,
+  update,
+  token,
+  isUpdateBlocked,
+}: UpdateItemProps) {
   const { classes } = useStyles();
   const butterBalance = useSelector(selectButterBalance);
   const solBalance = useSelector(selectSolBalance);
@@ -58,7 +64,7 @@ export function UpdateItem({ canUpdate, update, token }: UpdateItemProps) {
           <UpdateActionButton
             token={token}
             update={update}
-            disabled={!isAffordable}
+            disabled={!isAffordable || isUpdateBlocked}
           />
         )}
       </Group>

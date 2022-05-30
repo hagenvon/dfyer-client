@@ -30,7 +30,8 @@ export const selectIncompleteUpdatesPerToken = createSelector(
     const allByToken = all.filter((it) => it.token === token);
 
     return allByToken.filter(
-      (it) => ![IUpdateState.COMPLETED].includes(it.state)
+      (it) =>
+        ![IUpdateState.COMPLETED, IUpdateState.NOT_CONFIRMED].includes(it.state)
     );
   }
 );

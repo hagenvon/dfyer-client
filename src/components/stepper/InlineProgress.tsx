@@ -29,7 +29,7 @@ export function InlineProgress({
 
   const steps = getUpdateSteps(updateHistoryItem.state);
 
-  useFetchUpdateItem(updateHistoryItem.signature);
+  useFetchUpdateItem(updateHistoryItem);
 
   const isComplete = updateHistoryItem.state === IUpdateState.COMPLETED;
 

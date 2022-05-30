@@ -1,9 +1,15 @@
-import { Card, Text, createStyles, LoadingOverlay } from "@mantine/core";
+import { Card, createStyles, LoadingOverlay } from "@mantine/core";
 import React from "react";
 import { ITraitUpdate } from "../../models/ITraitUpdate";
 import { UpdateItem } from "./UpdateItem";
 import { stringifyFilterTrait } from "../../helper/filterTraitString";
 import { SectionHeader } from "./SectionHeader";
+import { useSelector } from "react-redux";
+import {
+  selectIncompleteUpdatesPerToken,
+  selectRecentUpdatesPerToken,
+} from "../../redux/updateHistorySelectors";
+import { RootState } from "../../redux/store";
 
 interface AvailableUpdatesProps {
   canUpdate: boolean;
@@ -32,10 +38,20 @@ export function AvailableUpdates({
 }: AvailableUpdatesProps) {
   const { classes } = useStyles();
 
+  const incompleteUpdates = useSelector((state: RootState) =>
+    selectIncompleteUpdatesPerToken(state, token || "")
+  );
+
+  const isUpdateBlocked = (update: ITraitUpdate) =>
+    !!incompleteUpdates.find(
+      (it) => it.traitUpdates.trait_type === update.trait_type
+    );
+
   const items = availableTraits.map((update, index) => (
     <UpdateItem
       update={update}
       canUpdate={canUpdate}
+      isUpdateBlocked={isUpdateBlocked(update)}
       token={token}
       key={stringifyFilterTrait(update)}
     />

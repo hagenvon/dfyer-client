@@ -1,13 +1,15 @@
 import { ITrait } from "../../models/ITrait";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { preview } from "../../api/updateTrait";
 import { LoadingOverlay } from "@mantine/core";
 
-export function Preview(props: {
+interface PreviewProps {
   token: string;
   traits: ITrait[];
   size?: number;
-}) {
+}
+
+export function WrappedPreview(props: PreviewProps) {
   const [source, setSource] = useState<string>();
   useEffect(() => {
     const run = async () => {
@@ -38,3 +40,12 @@ export function Preview(props: {
 
   return <img src={source} alt="preview" width={"100%"} />;
 }
+
+export const myComparison = (
+  prevProps: PreviewProps,
+  nextProps: PreviewProps
+) => {
+  return true;
+};
+
+export const Preview = memo(WrappedPreview, myComparison);
