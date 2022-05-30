@@ -1,57 +1,44 @@
-import { Alert, Stepper, Text } from "@mantine/core";
+import { Alert, Button, Stepper, Text } from "@mantine/core";
 import { IUpdateState } from "../../models/IUpdateState";
-import { useSelector } from "react-redux";
-import { selectActiveTransactionState } from "../../redux/metadataSelectors";
-import { RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { X } from "tabler-icons-react";
+import { retryUpdate } from "../../api/updateTrait";
+import {
+  selectUpdateEntity,
+  updateUpdateEntity,
+} from "../../redux/updateHistoryState";
+import { getUpdateSteps } from "./getUpdateSteps";
 
 export function ProgressStepper({ signature }: { signature: string }) {
+  const dispatch = useDispatch<AppDispatch>();
   const update = useSelector((state: RootState) =>
-    selectActiveTransactionState(state, signature)
+    selectUpdateEntity(state.updateHistory, signature)
   );
 
-  const getSteps = (state: IUpdateState) => [
-    {
-      label: "Process Transaction (Solana)",
-      loading: state === IUpdateState.CREATED,
-      failed: state === IUpdateState.NOT_CONFIRMED,
-      message: "Not confirmed",
-    },
-    {
-      label: "Verify Transaction",
-      loading: state === IUpdateState.CONFIRMED,
-      failed: state === IUpdateState.INVALID,
-      message: "Transaction invalid",
-    },
-    {
-      label: "Create Files",
-      loading: [IUpdateState.VALIDATED, IUpdateState.RENDERING].includes(state),
-      failed: state === IUpdateState.RENDERING_FAILED,
-      message: "Rendering failed",
-    },
-    {
-      label: "Upload Files",
-      loading: state === IUpdateState.RENDERED,
-      failed: state === IUpdateState.FILES_UPLOADED_FAILED,
-      message: "Upload failed",
-    },
-    {
-      label: "Update Metadata (Solana)",
-      loading: [
-        IUpdateState.FILES_UPLOADED,
-        IUpdateState.METADATA_UPDATE_TX_CREATED,
-      ].includes(state),
-      failed: state === IUpdateState.METADATA_UPDATE_TX_FAILED,
-      message: "Update Transaction failed. Please contact us.",
-    },
-  ];
+  if (!update) {
+    return null;
+  }
 
-  const steps = getSteps(update.state);
+  const steps = getUpdateSteps(update.state);
 
   const active =
     update.state === IUpdateState.COMPLETED
       ? steps.length
       : steps.findIndex((it) => it.loading || it.failed);
+
+  const failedButRetryable = steps.findIndex((it) => it.failed) > 1; // if the first two steps fail we can't do a retry
+
+  const handleRetry = async () => {
+    await retryUpdate(signature);
+    dispatch(
+      updateUpdateEntity({
+        ...update,
+        state: IUpdateState.CONFIRMED,
+        signature,
+      })
+    );
+  };
 
   return (
     <>
@@ -71,6 +58,12 @@ export function ProgressStepper({ signature }: { signature: string }) {
           />
         ))}
       </Stepper>
+
+      {failedButRetryable && (
+        <Button fullWidth={true} onClick={handleRetry}>
+          Retry
+        </Button>
+      )}
     </>
   );
 }

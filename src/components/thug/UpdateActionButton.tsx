@@ -10,6 +10,10 @@ import { useModals } from "@mantine/modals";
 import { useDispatch } from "react-redux";
 import { startActiveTransaction, startUpdating } from "../../redux/uiState";
 import { UpdateConfirmDialog } from "./UpdateConfirmDialog";
+import {
+  showUpdateModal,
+  updateUpdateEntity,
+} from "../../redux/updateHistoryState";
 
 interface UpdateActionButtonProps {
   token: string;
@@ -52,14 +56,18 @@ export function UpdateActionButton({
       });
 
       dispatch(
-        startActiveTransaction({
+        updateUpdateEntity({
           state: transactionCreated,
           signature,
           token,
-          showSuccess: false,
+          type: "CUSTOMIZE",
+          fromPublicKey: publicKey.toBase58(),
+          updatedAt: new Date().toISOString(),
+          traitUpdates: update,
+          updateSignature: "",
         })
       );
-      dispatch(startUpdating());
+      dispatch(showUpdateModal(signature));
     } catch (error) {
       console.log("TX failed", error);
     }

@@ -3,7 +3,7 @@ import { MantineThemeOverride } from "@mantine/core";
 export const lightTheme: MantineThemeOverride = {
   fontFamily: "Roboto Slab",
   colorScheme: "light",
-  primaryColor: "alien",
+  primaryColor: "orange",
   defaultRadius: 0,
   colors: {
     alien: [
@@ -24,7 +24,7 @@ export const lightTheme: MantineThemeOverride = {
 export const darkTheme: MantineThemeOverride = {
   fontFamily: "Roboto Slab",
   colorScheme: "dark",
-  primaryColor: "alien",
+  primaryColor: "orange",
   defaultRadius: 0,
   colors: {
     alien: [

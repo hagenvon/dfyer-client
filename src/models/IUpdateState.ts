@@ -27,3 +27,10 @@ export const nonActiveUpdateStates = [
   IUpdateState.FILES_UPLOADED_FAILED,
   IUpdateState.RENDERING_FAILED,
 ];
+
+export const retryableUpdateStates = [
+  IUpdateState.NOT_CONFIRMED,
+  IUpdateState.METADATA_UPDATE_TX_FAILED,
+  IUpdateState.FILES_UPLOADED_FAILED,
+  IUpdateState.RENDERING_FAILED,
+];

@@ -17,7 +17,6 @@ import {
   Card,
   Drawer,
 } from "@mantine/core";
-import { ThugGang } from "../components/headlines/ThugGang";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { InfamousData } from "../models/InfamousMap";
@@ -41,7 +40,6 @@ import {
   selectInfamousDataWithScore,
 } from "../redux/selectors";
 import { Editions, Weights } from "../models/Rarity.models";
-import { fetchListings } from "../redux/listingsState";
 import { Crown, Flame } from "tabler-icons-react";
 import { stringifyFilterTrait } from "../helper/filterTraitString";
 import { Headline } from "../components/headlines/Headline";
@@ -50,7 +48,6 @@ export function CollectionPage() {
   const [activePage, setPage] = useState(1);
   const [filterOpened, setFilterOpened] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(25);
-  const allMetadata = useSelector(selectInfamousDataWithScore);
   const countedAttributes = useSelector(selectCountedAttributes);
 
   const filters = useSelector(selectAllFilters);

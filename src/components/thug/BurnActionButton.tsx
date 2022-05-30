@@ -1,4 +1,4 @@
-import react, { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { getConnection } from "../../helper/getConnection";
 import { createTransaction } from "../../helper/createTransaction";
@@ -6,17 +6,9 @@ import { updateTrait } from "../../api/updateTrait";
 import { projectPubKey } from "../../constants/constants";
 import { ITraitUpdate } from "../../models/ITraitUpdate";
 import { Button, useMantineTheme } from "@mantine/core";
-import React from "react";
 import { useModals } from "@mantine/modals";
-import { useSolBalance } from "../../hooks/useSolBalance";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  endUpdating,
-  setActiveTransactionState,
-  startActiveTransaction,
-  startUpdating,
-} from "../../redux/uiState";
-import { useMintBalance } from "../../hooks/useMintBalance";
+import { startActiveTransaction, startUpdating } from "../../redux/uiState";
 import { UpdateConfirmDialog } from "./UpdateConfirmDialog";
 import { Flame } from "tabler-icons-react";
 import {
@@ -26,6 +18,7 @@ import {
 } from "../../redux/editionState";
 import { AppDispatch } from "../../redux/store";
 import { selectButterBalance, selectSolBalance } from "../../redux/uiSelectors";
+import { IUpdateState } from "../../models/IUpdateState";
 
 interface UpdateActionButtonProps {
   token: string;
@@ -82,7 +75,7 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
 
       dispatch(
         startActiveTransaction({
-          state: transactionCreated,
+          state: IUpdateState.CONFIRMED,
           signature,
           token,
           showSuccess: false,

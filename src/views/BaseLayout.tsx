@@ -8,13 +8,16 @@ import { UpdateProgress } from "../components/stepper/UpdateProgress";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsUpdating } from "../redux/metadataSelectors";
 import { fetchListings } from "../redux/listingsState";
+import { AppDispatch, RootState } from "../redux/store";
+import { hideUpdateModal } from "../redux/updateHistoryState";
 
 export const BaseLayout: FC<{ children: ReactNode }> = ({ children }) => {
-  const isUpdating = useSelector(selectIsUpdating);
-  const dispatch = useDispatch();
+  const updateSignature = useSelector(
+    (state: RootState) => state.updateHistory.showUpdateInModal
+  );
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(fetchListings());
   }, []);
 
@@ -35,13 +38,15 @@ export const BaseLayout: FC<{ children: ReactNode }> = ({ children }) => {
         <Container>{children}</Container>
       </main>
       <FooterDefault />
-      <Modal
-        opened={isUpdating}
-        onClose={() => dispatch(endUpdating())}
-        title="Process Update"
-      >
-        {isUpdating && <UpdateProgress />}
-      </Modal>
+      {updateSignature !== "" && (
+        <Modal
+          opened={updateSignature !== ""}
+          onClose={() => dispatch(hideUpdateModal())}
+          title="Process Update"
+        >
+          <UpdateProgress signature={updateSignature} />
+        </Modal>
+      )}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import listingsReducer from "./listingsState";
 import claimReducer from "./claimState";
 import editionsReducer from "./editionState";
 import rewardsReducer from "./rewardState";
+import updateHistoryReducer from "./updateHistoryState";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     claims: claimReducer,
     editions: editionsReducer,
     rewards: rewardsReducer,
+    updateHistory: updateHistoryReducer,
   },
 });
 

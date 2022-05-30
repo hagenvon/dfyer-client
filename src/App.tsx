@@ -11,6 +11,7 @@ import {
   SlopeWalletAdapter,
   SolflareWalletAdapter,
   TorusWalletAdapter,
+  SolletWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 import { clusterApiUrl } from "@solana/web3.js";
 import React, { FC, ReactNode, useEffect, useMemo } from "react";
@@ -60,7 +61,7 @@ const App: FC = () => {
             theme={colorScheme === "dark" ? darkTheme : lightTheme}
             withGlobalStyles
           >
-            <NotificationsProvider>
+            <NotificationsProvider position="bottom-right">
               <ModalsProvider>
                 <Context>
                   <Content />
@@ -93,6 +94,7 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
       new SlopeWalletAdapter(),
       new SolflareWalletAdapter({ network }),
       new TorusWalletAdapter(),
+      new SolletWalletAdapter(),
     ],
     [network]
   );

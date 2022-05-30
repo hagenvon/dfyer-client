@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { getUpdateState } from "../../api/updateTrait";
 import {
   ActiveUpdateDetails,
-  endUpdating,
   fetchMintBalance,
   fetchSolBalance,
   markActiveTransactionAsSuccess,
@@ -17,84 +16,44 @@ import { Text, Button, Alert } from "@mantine/core";
 import { butterPubKey } from "../../constants/constants";
 import { PublicKey } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { AppDispatch, RootState } from "../../redux/store";
+import {
+  hideUpdateModal,
+  selectUpdateEntity,
+} from "../../redux/updateHistoryState";
+import { useFetchUpdateItem } from "../../hooks/useFetchUpdateItem";
 
-export function UpdateProgress() {
-  const { publicKey } = useWallet();
-  const dispatch = useDispatch();
-  const activeUpdates: ActiveUpdateDetails[] = useSelector(
-    selectAllActiveUpdates
+export function UpdateProgress({ signature }: { signature: string }) {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const activeUpdate = useSelector((state: RootState) =>
+    selectUpdateEntity(state.updateHistory, signature)
   );
-  let intervals: NodeJS.Timer[] = [];
+  useFetchUpdateItem(signature);
 
-  useEffect(() => {
-    intervals.forEach((interval) => clearInterval(interval));
-
-    if (activeUpdates.length && publicKey) {
-      activeUpdates
-        .filter((activeUpdate) => {
-          return !nonActiveUpdateStates.includes(activeUpdate.state);
-        })
-        .forEach((activeUpdate, index) => {
-          intervals[index] = setInterval(async () => {
-            const state = await getUpdateState(activeUpdate.signature);
-            dispatch(
-              setActiveTransactionState({
-                state,
-                signature: activeUpdate.signature,
-              })
-            );
-            if (state === IUpdateState.COMPLETED) {
-              // @ts-ignore
-              await dispatch(fetchMetadata(activeUpdate.token));
-              await dispatch(
-                markActiveTransactionAsSuccess(activeUpdate.signature)
-              );
-
-              // @ts-ignore
-              dispatch(fetchSolBalance(publicKey));
-              dispatch(
-                // @ts-ignore
-                fetchMintBalance({
-                  mint: butterPubKey,
-                  fromPublicKey: new PublicKey(publicKey),
-                })
-              );
-            }
-          }, 1000);
-        });
-    }
-
-    // clear on unmount
-    return () => {
-      intervals.forEach((interval) => clearInterval(interval));
-    };
-  }, [activeUpdates]);
+  if (!activeUpdate) {
+    return null;
+  }
 
   return (
-    <>
-      {activeUpdates.map((activeUpdate) => {
-        return (
-          <div key={activeUpdate.signature}>
-            <ProgressStepper signature={activeUpdate.signature} />
+    <div key={activeUpdate.signature}>
+      <ProgressStepper signature={activeUpdate.signature} />
 
-            {activeUpdate.showSuccess && (
-              <Alert color={"green"} variant={"light"} p={10}>
-                <Text mb={10} size={"sm"}>
-                  Booom! Thug successfully updated!
-                </Text>
-                <Button
-                  variant={"outline"}
-                  color={"green"}
-                  onClick={() => dispatch(endUpdating())}
-                  fullWidth={true}
-                >
-                  Awesome!
-                </Button>
-              </Alert>
-            )}
-          </div>
-        );
-      })}
-    </>
+      {activeUpdate.state === IUpdateState.COMPLETED && (
+        <Alert color={"green"} variant={"light"} p={10}>
+          <Text mb={10} size={"sm"}>
+            Booom! Thug successfully updated!
+          </Text>
+          <Button
+            variant={"outline"}
+            color={"green"}
+            onClick={() => dispatch(hideUpdateModal())}
+            fullWidth={true}
+          >
+            Awesome!
+          </Button>
+        </Alert>
+      )}
+    </div>
   );
 }
