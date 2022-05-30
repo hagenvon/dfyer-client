@@ -19,6 +19,10 @@ import {
 import { AppDispatch } from "../../redux/store";
 import { selectButterBalance, selectSolBalance } from "../../redux/uiSelectors";
 import { IUpdateState } from "../../models/IUpdateState";
+import {
+  showUpdateModal,
+  updateUpdateEntity,
+} from "../../redux/updateHistoryState";
 
 interface UpdateActionButtonProps {
   token: string;
@@ -74,15 +78,18 @@ export function BurnActionButton({ update, token }: UpdateActionButtonProps) {
       });
 
       dispatch(
-        startActiveTransaction({
-          state: IUpdateState.CONFIRMED,
+        updateUpdateEntity({
+          state: transactionCreated,
           signature,
           token,
-          showSuccess: false,
+          type: "BURN",
+          fromPublicKey: publicKey.toBase58(),
+          updatedAt: new Date().toISOString(),
+          traitUpdates: burnUpdate,
+          updateSignature: "",
         })
       );
-
-      dispatch(startUpdating());
+      dispatch(showUpdateModal(signature));
     } catch (error) {
       console.log("TX failed", error);
     }

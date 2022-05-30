@@ -3,9 +3,21 @@ import { MantineThemeOverride } from "@mantine/core";
 export const lightTheme: MantineThemeOverride = {
   fontFamily: "Roboto Slab",
   colorScheme: "light",
-  primaryColor: "orange",
+  primaryColor: "infamous",
   defaultRadius: 0,
   colors: {
+    infamous: [
+      "#fff6e7",
+      "#ffedce",
+      "#ffe4b6",
+      "#ffdb9d",
+      "#ffd285",
+      "#eebe6e",
+      "#dcab56",
+      "#cb973f",
+      "#b98427",
+      "#a87010",
+    ],
     alien: [
       "#ECF7F8",
       "#CBE8EC",
@@ -24,9 +36,21 @@ export const lightTheme: MantineThemeOverride = {
 export const darkTheme: MantineThemeOverride = {
   fontFamily: "Roboto Slab",
   colorScheme: "dark",
-  primaryColor: "orange",
+  primaryColor: "infamous",
   defaultRadius: 0,
   colors: {
+    infamous: [
+      "#fff6e7",
+      "#ffedce",
+      "#ffe4b6",
+      "#ffdb9d",
+      "#ffd285",
+      "#eebe6e",
+      "#dcab56",
+      "#cb973f",
+      "#b98427",
+      "#a87010",
+    ],
     alien: [
       "#ECF7F8",
       "#CBE8EC",

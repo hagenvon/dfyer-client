@@ -48,7 +48,7 @@ export const faqsUpdates: FaqModel[] = [
   },
   {
     question: "So, why a ranking at all?",
-    answer: "To show live updates to changes of the rankings.",
+    answer: "As an orientation. And to show changes live",
   },
 ];
 
