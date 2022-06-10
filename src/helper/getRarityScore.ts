@@ -10,8 +10,9 @@ export const getRarityScore = (
 ): number => {
   const sanitizedAttributesList = getSanitizedAttributeList(counted, infData);
 
-  const scores = sanitizedAttributesList.map(({ trait_type, value }) => {
-    const score = 1 / (counted[trait_type][value] / total);
+  const scores = sanitizedAttributesList.map(({ trait_type, value }, index) => {
+    const score =
+      1 / (getTraitCount(counted, { trait_type, value }, total) / total);
     const weight = weights[trait_type] === undefined ? 1 : weights[trait_type];
 
     return score * weight;
@@ -40,7 +41,7 @@ function getSanitizedAttributeList(
       // if found everything is fine
       result.push(foundTrait);
     } else {
-      // if not found everything fill up with "None",
+      // if not found fill up with "None",
       // Except: Aliens don't have a neck
       if (traitType !== "Neck") {
         result.push({ trait_type: traitType, value: "None" });
@@ -49,3 +50,26 @@ function getSanitizedAttributeList(
   });
   return result;
 }
+
+const getTraitCount = (
+  counted: CountedAttributes,
+  trait: ITrait,
+  total: number
+): number => {
+  const { trait_type, value } = trait;
+  const traitCount = counted[trait_type][value];
+
+  if (traitCount !== undefined && value.toLowerCase() !== "none") {
+    return traitCount;
+  }
+
+  let result = 0;
+
+  Object.entries(counted[trait_type]).forEach(([key, val]) => {
+    if (key.toLowerCase() !== "none") {
+      result += val;
+    }
+  });
+
+  return result;
+};

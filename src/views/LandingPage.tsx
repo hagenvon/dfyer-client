@@ -6,16 +6,19 @@ import {
   Center,
   createStyles,
   Group,
+  Image,
   SimpleGrid,
 } from "@mantine/core";
 import { InfamousBirdzLogo } from "../components/InfamousBirdzLogo";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // @ts-ignore
 import thugImg from "../images/823.png";
 // @ts-ignore
 import burnImg from "../images/burn.png";
 // @ts-ignore
 import customize from "../images/customize.jpg";
+// @ts-ignore
+import wording from "../images/itd.png";
 
 import { LandingCard } from "../components/card-components/LandingCard";
 import { useMediaQuery } from "@mantine/hooks";
@@ -42,19 +45,6 @@ export function LandingPage() {
           height={132}
         />
       </Center>
-      <SimpleGrid cols={breakpointMatch ? 1 : 3}>
-        <LandingCard imageSrc={thugImg}>
-          <strong>$BUTTER</strong> – Get $Butter for holding. Our utility token.
-        </LandingCard>
-        <LandingCard imageSrc={customize}>
-          <strong>Customize</strong> – Customize your thug with classic and new
-          attributes.
-        </LandingCard>
-        <LandingCard imageSrc={burnImg}>
-          <strong>Burn</strong> – Transform your thug into a "Burnt Infamous
-          Thug".
-        </LandingCard>
-      </SimpleGrid>
 
       <Center mt={30} mb={30}>
         <Group>
@@ -66,6 +56,27 @@ export function LandingPage() {
           </Button>
         </Group>
       </Center>
+
+      <SimpleGrid cols={breakpointMatch ? 1 : 3}>
+        <Link to={"/gang"} style={{ textDecoration: "none" }}>
+          <LandingCard imageSrc={thugImg}>
+            <strong>$BUTTER</strong> – Get $Butter for holding. Our utility
+            token.
+          </LandingCard>
+        </Link>
+        <Link to={"/gang"} style={{ textDecoration: "none" }}>
+          <LandingCard imageSrc={customize}>
+            <strong>Customize</strong> – Customize your thug with classic and
+            new attributes.
+          </LandingCard>
+        </Link>
+        <Link to={"/gang"} style={{ textDecoration: "none" }}>
+          <LandingCard imageSrc={burnImg}>
+            <strong>Burn</strong> – Transform your thug into a "Burnt Infamous
+            Thug".
+          </LandingCard>
+        </Link>
+      </SimpleGrid>
     </Box>
   );
 }

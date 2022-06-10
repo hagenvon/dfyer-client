@@ -1,7 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IClaim } from "../models/IClaim";
-import { ITraitUpdate } from "../models/ITraitUpdate";
-import { getBurnEdition } from "../api/edition.api";
 import { RootState } from "./store";
 import { IReward } from "../models/IReward";
 import { getRewardConfig } from "../api/claim.api";
